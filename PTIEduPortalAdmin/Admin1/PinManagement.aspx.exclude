@@ -1,0 +1,178 @@
+﻿<%@ Page Language="C#" MasterPageFile="~/Admin/MasterPage.master" AutoEventWireup="true"
+    CodeFile="PinManagement.aspx.cs" Inherits="Admin_PinManagement" %>
+
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    <asp:ScriptManagerProxy ID="ScriptManagerProxy1" runat="server">
+    </asp:ScriptManagerProxy>
+    <asp:Timer ID="Timer1" runat="server" Interval="1000" OnTick="Timer1_Tick">
+    </asp:Timer>
+    <asp:Panel ID="PaymentTypePanel1" runat="server" HorizontalAlign="Left" Width="100%">
+        <table cellpadding="0" cellspacing="0" style="width: 100%">
+            <tr>
+                <td style="width: 100%">
+                    <asp:Panel ID="Panel2" runat="server" Width="100%" GroupingText="Generate token">
+                        <table style="width: 100%">
+                            <tr>
+                                <td>
+                                    <table cellpadding="2" cellspacing="0" style="position: relative; z-index: auto;
+                                        float: left; overflow: auto; table-layout: auto; border-color: Blue; border-style: solid;
+                                        border-width: thick">
+                                        <tr>
+                                            <td>
+                                                <table style="font-size: large">
+                                                    <tr>
+                                                        <td colspan="2" class="style2">
+                                                            <asp:CheckBox ID="ChkBoxPinEncrypt" runat="server" ForeColor="Red" Text="Encrypt Pin" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td nowrap="nowrap">
+                                                            Pin Type:
+                                                        </td>
+                                                        <td nowrap="nowrap">
+                                                            <asp:DropDownList ID="DDListPinType" runat="server">
+                                                            </asp:DropDownList>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            Number of Pin digits
+                                                        </td>
+                                                        <td nowrap="nowrap">
+                                                            <asp:TextBox ID="TxtDigit" runat="server" SkinID="mediumTxt" TabIndex="1" 
+                                                                Width="200px"></asp:TextBox>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            Number of Batches
+                                                        </td>
+                                                        <td nowrap="nowrap">
+                                                            <asp:TextBox ID="TxtBatchqty" runat="server" SkinID="mediumTxt" TabIndex="2" 
+                                                                Width="200px"></asp:TextBox>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            Quantity Per Batch
+                                                        </td>
+                                                        <td nowrap="nowrap">
+                                                            <asp:TextBox ID="TxtQtyTokenGenerated" runat="server" SkinID="mediumTxt" TabIndex="4"
+                                                                Width="200px"></asp:TextBox>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="vertical-align: top">
+                                                            Pin Format
+                                                        </td>
+                                                        <td nowrap="nowrap">
+                                                            <asp:RadioButtonList ID="RadioBtnFormat" runat="server" OnSelectedIndexChanged="RadioBtnFormat_Changed"
+                                                                AutoPostBack="true">
+                                                                <asp:ListItem>Numeric</asp:ListItem>
+                                                                <asp:ListItem>AlphaNumeric</asp:ListItem>
+                                                            </asp:RadioButtonList>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="vertical-align: top">
+                                                            <asp:Button ID="BtnGenerate" runat="server" Text="Generate/View" Width="110px" TabIndex="5"
+                                                                OnClientClick="return confirm('Please, make sure that the pin digit lenght, qty and format are ok?');"
+                                                                OnClick="BtnGenerate_Click" />
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 100%">
+                                    <hr style="background-color: #c40000; height: 1px; border-top-color: Red; border-style: solid" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    &nbsp;
+                                </td>
+                            </tr>
+                        </table>
+                    </asp:Panel>
+                </td>
+            </tr>
+        </table>
+    </asp:Panel>
+    <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+        <Triggers>
+            <asp:AsyncPostBackTrigger ControlID="Timer1" />
+        </Triggers>
+        <ContentTemplate>
+            <table width="100%">
+                <tr>
+                    <td>
+                        <table>
+                            <tr>
+                                <td align="left">
+                                    <asp:Label ID="lblProgress" runat="server" Font-Bold="True"></span></asp:Label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left">
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </ContentTemplate>
+        <Triggers>
+            <asp:PostBackTrigger ControlID="BtnExport" />
+        </Triggers>
+    </asp:UpdatePanel>
+    <asp:Panel ID="PanelGrid" runat="server">
+        <table>
+            <tr>
+                <td>
+                    <tr>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td align="left">
+                                        <asp:LinkButton ID="BtnExport" runat="server" OnClick="BtnExport_Click" TabIndex="9"
+                                            Text="Export" />
+                                    </td>
+                                    <td align="left">
+                                        <asp:LinkButton ID="BtnRefresh" runat="server" OnClick="BtnRefresh_Click" TabIndex="9"
+                                            Text="Refresh Grid" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <asp:GridView ID="GridView1" runat="server" BackColor="White" BorderColor="#999999"
+                        BorderStyle="Solid" BorderWidth="1px" CellPadding="3" PageSize="40">
+                        <PagerSettings Position="TopAndBottom" />
+                        <FooterStyle BackColor="#CCCCCC" />
+                        <HeaderStyle BackColor="Black" Font-Bold="True" ForeColor="White" HorizontalAlign="Left"
+                            VerticalAlign="Middle" />
+                        <PagerStyle BackColor="#999999" ForeColor="Black" HorizontalAlign="Center" />
+                        <SelectedRowStyle BackColor="#000099" Font-Bold="True" ForeColor="White" />
+                        <AlternatingRowStyle BackColor="#CCCCCC" />
+                    </asp:GridView>
+                </td>
+            </tr>
+        </table>
+    </asp:Panel>
+</asp:Content>
+<asp:Content ID="Content3" runat="server" ContentPlaceHolderID="head">
+    <style type="text/css">
+        .style2
+        {
+            height: 34px;
+        }
+    </style>
+</asp:Content>

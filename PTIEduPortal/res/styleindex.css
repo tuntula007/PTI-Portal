@@ -1,0 +1,162 @@
+@charset "utf-8";
+/* CSS Document */
+
+.tbstyle
+{
+	border-top:#333 1px dashed;
+}
+
+.myborderright
+{
+	border-right: #666 dashed 1px;
+	font-size:12px;
+	color:#000;
+}
+.myborderright2
+{
+
+	font-size:9px;
+	color:#000;
+	font-size:12px;
+}
+
+.myborderright2 a
+{
+	font-size:9px;
+	color:#F00;
+	font-size:13px;
+	font-weight:bold;
+	
+}
+
+.myborderright2 a:hover
+{
+
+	font-size:9px;
+	color:#000;
+	font-size:12px;
+	
+}
+
+
+.topmenu
+{
+	
+	font-family:tahoma;
+	font-size:12px;
+	font-weight:bold;
+}
+
+
+
+.topmenu a
+{
+	
+	font-family:tahoma;
+	font-size:12px;
+	font-weight:bold;
+	text-align:center;
+color:#000;
+
+}
+
+.topmenu a:hover
+{
+	
+	font-family:tahoma;
+	font-size:12px;
+	font-weight:bold;
+	text-align:center;
+color:red;
+
+}
+
+
+.topmenu td
+{
+	
+	font-family:tahoma;
+	font-size:12px;
+	font-weight:bold;
+	text-align:center;
+	border-right:dashed 1px #666;
+	padding-left:3px;
+}
+
+
+.dropboxstyle
+{
+	font-family:tahoma; font-size:11px; color:#FFF; text-align:justify;padding-right:2px
+}
+
+.feestrtable
+{
+	font-family:tahoma; font-size:12px; color:#333; text-align:justify;padding-right:2px
+}
+
+.feestrtable td
+{
+	height:25px;
+}
+
+#feestructurehead
+{
+font-weight:bold;
+font-size:12px;
+}
+
+
+.padtextleft
+{
+	padding-left:20px;
+}
+
+
+
+/*Print style */
+.Printheader
+{
+	font-family:arial;
+	font-size:24px;
+	font-weight:bold;
+	color:#000;
+	text-align:center;
+	border-bottom:dashed #000 1px;
+}
+.subheade
+{
+	
+	font-family:arial;
+	font-size:15px;
+	font-weight:bold;
+	color:#000;
+	text-align:center;
+	
+}
+
+
+.regprocedure
+{
+	font-family:arial;
+	font-size:15px;
+	
+
+	text-align:center;
+	}
+	
+	
+.regprocedure span
+{
+	font-family:arial;
+	font-size:12px;
+	font-weight:bold;
+    font-style:italic;
+	}
+	
+	
+	.homefooter
+	{
+		font-family:arial;
+		font-size:10px;
+		color:#000;
+	}

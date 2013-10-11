@@ -1,0 +1,148 @@
+﻿<%@ Page Language="C#"  AutoEventWireup="true" MasterPageFile="~/Admin/MasterPage.master" CodeFile="RptPinUsageParam.aspx.cs" Inherits="RptPinUsageParam" Title="PIN Usage Reports" %>
+
+<%@ Register assembly="CrystalDecisions.Web, Version=10.5.3700.0, Culture=neutral, PublicKeyToken=692fbea5521e1304" namespace="CrystalDecisions.Web" tagprefix="CR" %>
+
+
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+    <asp:Panel ID="Panel1" runat="server" Font-Names="Tahoma" Font-Size="Small" 
+        Width="551px">
+        <table style="width: 700px">
+            <tr>
+                <td colspan="2" style="font-size: large">
+                    CONFIRMATION ORDER USAGE REPORT FORM</td>
+            </tr>
+            <tr>
+                <td class="style15" style="text-align: left; width: 193px;">
+                    Session:</td>
+                <td style="text-align: left">
+                    <asp:DropDownList ID="CmbSession" runat="server" DataSourceID="ObjSession" 
+                        DataTextField="PresentSession" DataValueField="PresentSession">
+                    </asp:DropDownList>
+                    <asp:ObjectDataSource ID="ObjSession" runat="server" 
+                        SelectMethod="getAcademicSessions" 
+                        TypeName="CybSoft.EduPortal.Business.SignOnBusiness"></asp:ObjectDataSource>
+                </td>
+            </tr>
+            <tr>
+                <td class="style15" style="text-align: left; width: 193px;">
+                    Programme:</td>
+                <td style="text-align: left">
+                    <asp:DropDownList ID="CmbProgramme" runat="server" 
+                         
+                        style="font-family: Tahoma; font-size: small" AutoPostBack="True" 
+                        onselectedindexchanged="CmbProgramme_SelectedIndexChanged">
+                        <asp:ListItem>ND</asp:ListItem>
+                        <asp:ListItem>NDS</asp:ListItem>
+                        <asp:ListItem>HND</asp:ListItem>
+                        <asp:ListItem>PRE-ND</asp:ListItem>
+                    </asp:DropDownList>
+                </td>
+            </tr>
+            <tr>
+                <td class="style15" style="text-align: left; width: 193px;">
+                    Mode of Study:</td>
+                <td style="text-align: left">
+                    <asp:DropDownList ID="CmbMode" runat="server" AutoPostBack="True" 
+                        onselectedindexchanged="CmbMode_SelectedIndexChanged">
+                        <asp:ListItem>Full-Time</asp:ListItem>
+                        <asp:ListItem>PART - TIME</asp:ListItem>
+                    </asp:DropDownList>
+                </td>
+            </tr>
+            <tr>
+                <td class="style15" style="text-align: left; height: 30px; width: 193px;">
+                    Course Of Study:</td>
+                <td style="text-align: left; height: 30px;">
+                    <asp:DropDownList ID="CmbCourses" runat="server" AppendDataBoundItems="True" 
+                        DataSourceID="ObjCourses" DataTextField="CourseOfStudyName" 
+                        DataValueField="CourseOfStudyID" 
+                        onselectedindexchanged="CmbReportSpec_SelectedIndexChanged" 
+                        style="font-family: Tahoma; font-size: small">
+                        <asp:ListItem Value="All">All Courses</asp:ListItem>
+                    </asp:DropDownList>
+                </td>
+            </tr>
+            <tr>
+                <td class="style10" style="text-align: left; width: 193px;">
+                    Academic Level:</td>
+                <td style="text-align: left">
+                    <asp:DropDownList ID="CmbLevel" runat="server" AppendDataBoundItems="True" 
+                        
+                        style="font-family: Tahoma; font-size: small">
+                        <asp:ListItem Selected="True">All Levels</asp:ListItem>
+                        <asp:ListItem>ND1</asp:ListItem>
+                        <asp:ListItem>NDII</asp:ListItem>
+                        <asp:ListItem>HND1</asp:ListItem>
+                        <asp:ListItem>HNDII</asp:ListItem>
+                        <asp:ListItem>Pre-ND</asp:ListItem>
+                    </asp:DropDownList>
+                </td>
+            </tr>
+            <tr>
+                <td class="style10" style="text-align: left; width: 193px;">
+                    Report Type:</td>
+                <td style="text-align: left">
+                    <asp:DropDownList ID="CmbRtype" runat="server" AppendDataBoundItems="True" 
+                        AutoPostBack="True" onselectedindexchanged="CmbRtype_SelectedIndexChanged">
+                        <asp:ListItem Value="SchoolFeesPin">School Fees</asp:ListItem>
+                        <asp:ListItem Value="ApplicationFeesPin">Application Fees</asp:ListItem>
+                        <asp:ListItem>Students Total Payment</asp:ListItem>
+                    </asp:DropDownList>
+                </td>
+            </tr>
+            
+            <tr>
+                <td style="text-align: left" class="style10" colspan="2">
+                    <asp:Panel ID="PanelGroup" runat="server">
+                        <table class="style18">
+                            <tr>
+                                <td class="style19">
+                                    Program Type</td>
+                                <td>
+                                    <asp:DropDownList ID="CmbGroupBy" runat="server">
+                                        <asp:ListItem Value="Morning">Morning</asp:ListItem>
+                                        <asp:ListItem Value="Evening">Evening</asp:ListItem>
+                                    </asp:DropDownList>
+                                </td>
+                            </tr>
+                        </table>
+                    </asp:Panel>
+                    </td>
+            </tr>
+            <tr>
+                <td class="style16" style="text-align: left; width: 193px;">
+                    </td>
+                <td style="text-align: left">
+                    <asp:ObjectDataSource ID="ObjCourses" runat="server" 
+                        SelectMethod="GetStudentsCourses" 
+                        TypeName="CybSoft.EduPortal.Business.SignOnBusiness">
+                        <SelectParameters>
+                            <asp:ControlParameter ControlID="CmbProgramme" Name="Programme" 
+                                PropertyName="SelectedValue" Type="String" />
+                            <asp:ControlParameter ControlID="CmbMode" Name="ModeOfStudy" 
+                                PropertyName="SelectedValue" Type="String" />
+                        </SelectParameters>
+                    </asp:ObjectDataSource>
+                    <asp:Label ID="LblError" runat="server" Font-Bold="True" ForeColor="Red"></asp:Label>
+                </td>
+            </tr>
+            <tr>
+                <td class="style17" style="text-align: left; width: 193px;">
+                    &nbsp;</td>
+                <td style="text-align: left">
+                    <asp:Button ID="BtnShow" runat="server" onclick="BtnShow_Click" 
+                        Text="Show Report" Width="101px" />
+                    <asp:Button ID="BtnSavePassport" runat="server" onclick="BtnSavePassport_Click" 
+                        Text="Save Passport" Visible="False" Width="115px" />
+                </td>
+            </tr>
+            <tr>
+                <td class="style17" style="text-align: left; width: 193px;">
+                    &nbsp;</td>
+                <td style="text-align: left">
+                    &nbsp;</td>
+            </tr>
+        </table>
+    </asp:Panel>
+</asp:Content>
+

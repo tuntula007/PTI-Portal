@@ -1,0 +1,203 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="AdminMasterPage.master.cs" Inherits="MasterPageform" %>
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server"><link rel="stylesheet" type="text/css" href="css/stylemain.css"/><link rel="stylesheet" type="text/css" href="css/style1.css"/>
+    <title></title>
+    <asp:ContentPlaceHolder id="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <style type="text/css">
+        .style2
+        {
+            font-family: Tahoma;
+        }
+        .style3
+        {
+            font-size: small;
+        }
+        #templatemain_r2_c3
+        {
+            height: 45px;
+            width: 284px;
+        }
+        .style4
+        {
+            font-size: small;
+            font-family: Tahoma;
+            font-weight: bold;
+            height: 28px;
+            width: 148px;
+        }
+        .style5
+        {
+            font-family: Tahoma;
+            font-size: small;
+            font-weight: bold;
+            width: 148px;
+        }
+        .style6
+        {
+            width: 148px;
+        }
+        .style7
+        {
+            width: 147px;
+        }
+        .style8
+        {
+            width: 148px;
+            height: 21px;
+        }
+        .style9
+        {
+            width: 148px;
+            height: 23px;
+        }
+    </style>
+    </head>
+<body>
+<div align="center">
+                      <form id="form1" runat="server">
+  <table border="0" cellpadding="0" cellspacing="0" width="929">
+    <!-- fwtable fwsrc="templatemain.png" fwpage="Page 1" fwbase="templatemain.gif" fwstyle="Dreamweaver" fwdocid = "1559416576" fwnested="0" -->
+    <tr>
+      <td><img src="images/spacer.gif" width="22" height="1" border="0" alt="" /></td>
+      <td><img src="images/spacer.gif" width="24" height="1" border="0" alt="" /></td>
+      <td><img src="images/spacer.gif" width="26" height="1" border="0" alt="" /></td>
+      <td><img src="images/spacer.gif" width="44" height="1" border="0" alt="" /></td>
+      <td><img src="images/spacer.gif" width="224" height="1" border="0" alt="" /></td>
+      <td><img src="images/spacer.gif" width="29" height="1" border="0" alt="" /></td>
+      <td><img src="images/spacer.gif" width="21" height="1" border="0" alt="" /></td>
+      <td><img src="images/spacer.gif" width="462" height="1" border="0" alt="" /></td>
+      <td><img src="images/spacer.gif" width="30" height="1" border="0" alt="" /></td>
+      <td><img src="images/spacer.gif" width="27" height="1" border="0" alt="" /></td>
+      <td><img src="images/spacer.gif" width="15" height="1" border="0" alt="" /></td>
+      <td><img src="images/spacer.gif" width="5" height="1" border="0" alt="" /></td>
+      <td><img src="images/spacer.gif" width="1" height="1" border="0" alt="" /></td>
+    </tr>
+    <tr>
+      <td colspan="2"><img name="templatemain_r1_c1" src="images/templatemain_r1_c1.gif" width="46" height="14" border="0" id="templatemain_r1_c1" alt="" /></td>
+      <td colspan="3" class="toprepline1"><img name="templatemain_r1_c3" src="images/templatemain_r1_c3.gif" width="294" height="14" border="0" id="templatemain_r1_c3" alt="" /></td>
+      <td colspan="7"><img name="templatemain_r1_c6" src="images/templatemain_r1_c6.gif" width="589" height="14" border="0" id="templatemain_r1_c6" alt="" /></td>
+      <td><img src="images/spacer.gif" width="1" height="14" border="0" alt="" /></td>
+    </tr>
+    <tr>
+      <td colspan="2"><img name="leftTopcurve1" src="images/leftTopcurve1.gif" width="46" height="73" border="0" id="leftTopcurve1" alt="" /></td>
+      <td colspan="3"><img name="templatemain_r2_c3" src="images/templatemain_r2_c3.gif" 
+              border="0" id="templatemain_r2_c3" alt="" /></td>
+      <td colspan="4" 
+            style="background-image:url(images/staticTopbarimage1.gif); background-repeat:no-repeat" 
+            align="right">
+                     <span class="style2">
+                     <a href="StudentControlCenter.aspx" 
+              style="color:White; text-decoration:none"><span class="style3">My Portal Home</span></a><span 
+                         class="style3">&nbsp;|</span></span>&nbsp;<span class="style2"><a href="feedbackform.aspx" 
+              style="color:White; text-decoration:none"><span class="style3">Need Help? Contact Us</span></a><span 
+                         class="style3">&nbsp;| 
+                     </span> 
+                     <a href="Logout.aspx" 
+              style="color:White; text-decoration:none"><span class="style3">Logout</span></a></span>&nbsp; 
+        </td>
+      <td colspan="2"><img name="topbarRightrepeat1" src="images/topbarRightrepeat1.gif" width="42" height="73" border="0" id="topbarRightrepeat1" alt="" /></td>
+      <td rowspan="7" style="background:images/templatemain_r2_c12.gif no-repeat"></td>
+      <td><img src="images/spacer.gif" width="1" height="73" border="0" alt="" /></td>
+    </tr>
+    <tr>
+      <td class="sidereplineleft1-1">&nbsp;</td>
+      <td colspan="9" rowspan="3" valign="top">
+                          <table style="width:100%;">
+                              <tr>
+                                  <td class="style7" valign="top">
+                                      <table style="width: 104%;">
+                                          <tr>
+                                              <td style="text-align: left" bgcolor="#9999FF" class="style4">
+                                                  DETAILED REPORTS</td>
+                                          </tr>
+                                          <tr>
+                                              <td style="text-align: left" class="style6">
+                                                  <asp:LinkButton ID="LnkRegDetails" runat="server" Font-Names="Tahoma" 
+                                                      Font-Size="Small" style="font-weight: 700" onclick="LnkRegDetails_Click1">Registration Reports</asp:LinkButton>
+                                              </td>
+                                          </tr>
+                                          <tr>
+                                              <td style="text-align: left" class="style9">
+                                                  <asp:LinkButton ID="LnkStudList" runat="server" Font-Names="Tahoma" 
+                                                      Font-Size="Small" style="font-weight: 700" onclick="LnkStudList_Click">Students Listing</asp:LinkButton>
+                                              </td>
+                                                      </tr>
+                                          <tr>
+                                              <td style="text-align: left" class="style8">
+                                                  <asp:LinkButton ID="LnkBursaryDetails" runat="server" Font-Names="Tahoma" 
+                                                      Font-Size="Small" style="font-weight: 700" 
+                                                      onclick="LnkBursaryDetails_Click">Bursary 
+                                                  Reports</asp:LinkButton>
+                                              </td>
+                                                      </tr>
+                                          <tr>
+                                              <td bgcolor="#9999FF" class="style5">
+                                                  SUMMARY REPORTS</td>
+                                                      </tr>
+                                          <tr>
+                                              <td style="text-align: left" class="style6">
+                                                  <asp:LinkButton ID="LnkRegSummary" runat="server" Font-Names="Tahoma" 
+                                                      Font-Size="Small" style="font-weight: 700" onclick="LnkRegSummary_Click">Registration Statistics</asp:LinkButton>
+                                              </td>
+                                                      </tr>
+                                          <tr>
+                                              <td style="text-align: left" class="style6">
+                                                  <asp:LinkButton ID="LnkStudSummary" runat="server" Font-Names="Tahoma" 
+                                                      Font-Size="Small" style="font-weight: 700" onclick="LnkStudSummary_Click">Students Statistics</asp:LinkButton>
+                                              </td>
+                                                      </tr>
+                                          <tr>
+                                              <td style="text-align: left" class="style6">
+                                                  <asp:LinkButton ID="LnkBursarySummary" runat="server" Font-Names="Tahoma" 
+                                                      Font-Size="Small" style="font-weight: 700" 
+                                                      onclick="LnkBursarySummary_Click">Bursary Reports</asp:LinkButton>
+                                              </td>
+                                                      </tr>
+                                                  </table>
+                                              </td>
+                                              <td valign="top">
+                          <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                              <p style="text-align: left">
+                                  </p>
+                          </asp:ContentPlaceHolder>
+                                              </td>
+                                          </tr>
+                                      </table>
+          </td>
+      <td rowspan="2" class="sidereplineRight1-1">&nbsp;</td>
+      <td><img src="images/spacer.gif" width="1" height="16" border="0" alt="" /></td>
+    </tr>
+    <tr>
+      <td rowspan="2" class="sidereplineleft1-1">&nbsp;</td>
+      <td><img src="images/spacer.gif" width="1" height="67" border="0" alt="" /></td>
+    </tr>
+    <tr>
+      <td class="sidereplineRight1-1">&nbsp;</td>
+      <td><img src="images/spacer.gif" width="1" height="302" border="0" alt="" /></td>
+    </tr>
+    <tr>
+      <td colspan="11" style="background-image:url(images/template1_r6_c11.gif); background-repeat:no-repeat">
+          For technical queries, send Email to itsupport@deltasuniversity.comersity.com</td>
+      <td><img src="images/spacer.gif" width="1" height="40" border="0" alt="" /></td>
+    </tr>
+    <tr>
+      <td colspan="3"><img name="LeftbottomCurve1" src="images/LeftbottomCurve1.gif" width="72" height="50" border="0" id="LeftbottomCurve1" alt="" /></td>
+      <td><img name="centerbottombarshort1" src="images/centerbottombarshort1.gif" width="44" height="50" border="0" id="centerbottombarshort1" alt="" /></td>
+      <td colspan="4"><img name="centerbottombarLong1" src="images/centerbottombarLong1.gif" width="736" height="50" border="0" id="centerbottombarLong1" alt="" /></td>
+      <td colspan="3"><img name="rightbottomCurve1" src="images/rightbottomCurve1.gif" width="72" height="50" border="0" id="rightbottomCurve1" alt="" /></td>
+      <td><img src="images/spacer.gif" width="1" height="50" border="0" alt="" /></td>
+    </tr>
+    <tr>
+      <td colspan="11"><img name="templatemain_r8_c1" src="images/templatemain_r8_c1.gif" width="924" height="9" border="0" id="templatemain_r8_c1" alt="" /></td>
+      <td><img src="images/spacer.gif" width="1" height="9" border="0" alt="" /></td>
+    </tr>
+  </table>
+                      </form>
+</div>
+</body>
+</html>

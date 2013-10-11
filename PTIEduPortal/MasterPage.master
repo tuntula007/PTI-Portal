@@ -1,0 +1,178 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPage" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta charset="utf-8">
+    <title>Petroleum Training Institute,Effurun, Delta State</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/docs.css" rel="stylesheet">
+    <style type="text/css">
+        body
+        {
+            padding-top: 60px;
+            padding-bottom: 40px;
+        }
+        .sidebar-nav
+        {
+            padding: 9px 0;
+        }
+        @media (max-width: 980px)
+        {
+            /* Enable use of floated navbar text */    .navbar-text.pull-right
+            {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+    </style>
+    <style>
+        $(
+        function()
+        { $('.carousel').carousel({
+      interval: 2000
+    });
+$('.carousel-control.right').trigger('click');
+});</style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+    <link href="/img/PTI-Logo.jpg" rel="shortcut icon" type="image/x-icon" />
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form2" runat="server">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar">
+                    </span>
+                </button>
+                <div class="nav-collapse collapse">
+                    <%--<p class=" text-success well-small btn  pull-right ">
+                        Petroleum Training Institute, Effurun
+                    </p>--%>
+                    <ul class="nav">
+                        <li class="active"><a href="Default.aspx">Home</a></li>
+                        <li><a href="StudentLogin.aspx">Student Login</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="ContactUs.aspx">Contact Us</a> </li>
+                        <li><a href="http://mail.pti.edu.ng ">Staff Email</a> </li>
+                         <li><a href="Downloads.aspx">Downloads</a> </li>
+                    </ul>
+                    
+                </div>
+                <div>
+                <a class="logo" href="#">
+                        <img src="img/PTI-Logo-smalL.fw.png">
+                    </a>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span3">
+                <div class="well sidebar-nav">
+                    <ul class="nav nav-list">
+                        <!--<li class="nav-header">HOT LINKS</li>-->
+                        <li><a class="sidebar" href="ApplicationProcedure.aspx">Application Procedure &raquo;</a></li>
+                        <li><a class="sidebar" href="ApplicationInfo.aspx">Available Programmes &raquo;</a></li>
+                        <li><a class="sidebar" href="ApplicantsSignOn.aspx">Apply For Admission &raquo;</a></li>
+                        <li><a class="sidebar" href="ApplicantLogin.aspx">Return To My Application &raquo;</a></li>
+                        <li><a class="sidebar" href="Prospectus 2013.pdf">Download Prospectus &raquo;</a></li>
+                        <li><a class="sidebar" href="PTI Short courses for 2013 year.pdf">Download Short Courses
+                            &raquo;</a></li>
+                        <li><a class="sidebar" href="Charges for 2013 Short Courses.pdf">Short Courses Fees
+                            &raquo;</a></li>
+                        <li><a class="sidebar" href="ApplicantLogin.aspx">Check Exam Scores &raquo;</a></li>
+                        <li><a class="sidebar" href="ApplicantLogin.aspx">Check Admission Status &raquo;</a></li>
+                        <li><a class="sidebar" href="StudentLogin.aspx">Course Registration &raquo;</a></li>
+                        <li><a class="sidebar" href="#">E-Library &raquo;</a></li>
+                    </ul>
+                    <br>
+                    <br>
+                    <div align="center">
+                        <a href="#">
+                            <img src="img/Faqsmain1.jpg"></a></div>
+                </div>
+                <!--/.well -->
+            </div>
+            <!--/span-->
+            <div class="span8">
+                <div class="row-fluid">
+                    <div >
+                    <div class="hero-unit">
+                        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                            
+                        </asp:ContentPlaceHolder>
+                    </div>
+                        </div>
+                </div>
+            </div>
+            <!--/row-->
+        </div>
+        <!--/span-->
+    </div>
+    <!--/row-->
+    <hr>
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    <script src="js/jquery.js" type="text/javascript"></script>
+
+    <script src="js/bootstrap-transition.js" type="text/javascript"></script>
+
+    <script src="js/bootstrap-alert.js" type="text/javascript"></script>
+
+    <script src="js/bootstrap-modal.js" type="text/javascript"></script>
+
+    <script src="js/bootstrap-dropdown.js" type="text/javascript"></script>
+
+    <script src="js/bootstrap-scrollspy.js" type="text/javascript"></script>
+
+    <script src="js/bootstrap-tab.js" type="text/javascript"></script>
+
+    <script src="js/bootstrap-tooltip.js" type="text/javascript"></script>
+
+    <script src="js/bootstrap-popover.js" type="text/javascript"></script>
+
+    <script src="js/bootstrap-button.js" type="text/javascript"></script>
+
+    <script src="js/bootstrap-collapse.js" type="text/javascript"></script>
+
+    <script src="js/bootstrap-carousel.js" type="text/javascript"></script>
+
+    <script src="js/bootstrap-typeahead.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        $('.carousel').carousel({
+            interval: 4000
+        })
+    </script>
+
+    </form>
+</body>
+<div class="row-fluid">
+    <div class="footer">
+        <p>
+             Copyright &copy; 2011 - <% Response.Write(DateTime.Now.Year.ToString()); %>. Petroleum Training Institute, Effurun, Delta State
+        </p>
+      </div>
+</div>
+</html>

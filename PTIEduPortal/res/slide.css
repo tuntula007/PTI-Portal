@@ -1,0 +1,36 @@
+HTML {
+	
+}
+.top-view .imageElement {
+	LEFT: 5px; VISIBILITY: hidden; PADDING-BOTTOM: 5px; POSITION: relative; TOP: 0px
+}
+.textElement {
+	DISPLAY: none; Z-INDEX: 1000; LEFT: 0px; BACKGROUND-IMAGE: url(images/black_bg.png); WIDTH: 672px; COLOR: #ffffff; BACKGROUND-REPEAT: repeat-x; POSITION: absolute; TOP: 176px; HEIGHT: 60px
+}
+#content .textElement A {
+	FONT-WEIGHT: bold; COLOR: #ffffff; TEXT-DECORATION: none
+}
+#content .textElement A:link {
+	FONT-WEIGHT: bold; COLOR: #ffffff; TEXT-DECORATION: none
+}
+#content .textElement A:hover {
+	FONT-WEIGHT: bold; COLOR: #ffffff; TEXT-DECORATION: underline
+}
+#content .textElement A:visited {
+	FONT-WEIGHT: bold; COLOR: #ffffff; TEXT-DECORATION: none
+}
+#content .textElement H2 {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 5px; FONT-WEIGHT: bold; PADDING-BOTTOM: 0px; COLOR: #ffffff; PADDING-TOP: 5px
+}
+.textElement P {
+	PADDING-RIGHT: 5px; MARGIN-TOP: 2px; PADDING-LEFT: 5px; PADDING-BOTTOM: 5px; COLOR: #ffffff; PADDING-TOP: 0px
+}
+.sideImage {
+	DISPLAY: block; Z-INDEX: 998; FLOAT: left; BACKGROUND-IMAGE: url(images/bg_greyline.gif); WIDTH: 100%; BACKGROUND-REPEAT: repeat-x; TEXT-ALIGN: center
+}
+.navImages {
+	PADDING-RIGHT: 3px; DISPLAY: block; PADDING-LEFT: 3px; Z-INDEX: 999; FLOAT: left; PADDING-BOTTOM: 0px; WIDTH: 100%; PADDING-TOP: 0px; TEXT-ALIGN: center
+}
+.navImage {
+	Z-INDEX: 1000; CURSOR: pointer
+}

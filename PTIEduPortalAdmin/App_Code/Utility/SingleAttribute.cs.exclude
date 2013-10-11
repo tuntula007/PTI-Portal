@@ -1,0 +1,90 @@
+﻿using System;
+using System.Data;
+using System.Configuration;
+using System.Web;
+using System.Web.Security;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
+using System.Web.UI.WebControls.WebParts;
+using System.Messaging;
+using Cyberspace.ServiceBrocker;
+
+
+/// <summary>
+/// Summary description for SingleAttribute
+/// </summary>
+public class SingleAttribute
+{
+	//
+    private string SingleAttributePath;
+    public SingleAttribute()
+	{
+		//
+		// TODO: Add constructor logic here
+		//
+        SingleAttributePath = ".\\Private$\\" + System.Configuration.ConfigurationManager.AppSettings["SingleAttribute"];
+	}
+    public  string ToDataBase(string sourceClass, string methodName, string actionType, string actionBody )
+    {
+            try
+            {
+
+                //Package instruction to be sent to a background service that listens to queue
+                CSingleAttribute sa = new CSingleAttribute();
+                
+                sa.SourceApplication = "Eduportal";
+                
+                sa.SourceClass = sourceClass;
+                sa.MethodName = methodName ;
+                sa.ActionType = actionType ;
+                sa.ActionBody = actionBody;
+                sa.DateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                // Post to queue
+                if (PostRequest(sa) == true)
+                {
+                    return "true";
+                }
+                else {
+                    return "false" ;
+                  
+                    
+                }
+              
+            }
+            catch ( Exception ex)
+            {
+                return ex.Message;
+            }
+            //return "";
+
+    }
+
+    private  bool PostRequest(CSingleAttribute sa)
+    {
+        // Initialise return value to default
+        bool rtnvalue = false;
+        try
+        {
+           
+            
+           // SingleAttributePath = ".\\Private$\\SingleAttribute";
+            MessageQueue mq = new MessageQueue(SingleAttributePath);
+      
+            //mq.DefaultPropertiesToSend.Label = sa.ActionBody;
+            mq.Send(sa);
+            mq.Dispose();
+            //Operation complete, set return value to true
+            rtnvalue = true;
+        }
+        catch (Exception ex)
+        {
+
+            throw  ex;
+            
+        }
+
+        return rtnvalue;
+    }
+    }
+

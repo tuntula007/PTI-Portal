@@ -1,0 +1,2900 @@
+﻿using System;
+using System.Collections;
+using System.Configuration;
+using System.Data;
+using System.Web;
+using System.Web.Security;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
+using System.Web.UI.WebControls.WebParts;
+using System.Data.SqlClient;
+using System.Text;
+using System.Text.RegularExpressions;
+using Cyberspace.Emailpackage;
+using System.Messaging;
+using Cyberspace.ServiceBrocker;
+using CybSoft.EduPortal.Business;
+using CybSoft.EduPortal.Data;
+using System.Security.Cryptography;
+
+public partial class Token : System.Web.UI.Page
+{
+    private static string str = ConfigurationManager.AppSettings["conn"];
+    private static string GroupWebMaster = ConfigurationManager.AppSettings["Group1"];
+    private static string GroupGuest = ConfigurationManager.AppSettings["Group3"];
+    private static string PrefixSerial = ConfigurationManager.AppSettings["PrefixSrn"];
+    //
+    //PinUsersPrefix
+    private static string SrialFormat = ConfigurationManager.AppSettings["DigitFormat"];
+
+    private static string Key = ConfigurationManager.AppSettings["CyberKey"];
+    private static string patternInt = ConfigurationManager.AppSettings["regexint"];
+    //PinExpDateMonth
+    private static string PinExpInterval = ConfigurationManager.AppSettings["PinExpDateMonth"];
+    private static string NotifyschedulmailPath = ".\\private$\\" + ConfigurationManager.AppSettings["Schedulenotify"];
+    private static string exportheader = "";
+    private static string Exportfilename = "";
+    private static string GridCaption = "";
+    private static int GViewWidth = 0;
+    private static string LastSerial = "";
+    private static int LastSrn = 0;
+    private static string Sql = "";
+    private static string PinFormat = "Numeric";
+    private static bool PinPreview = false;
+    private static Hashtable EncryptPins = null;
+
+    private static CWritetoqueue rq = null;//(CWritetoqueue)Session["user"];
+    private static string ActivePersonGroup = "";
+
+    private static string msg = "";
+    private static string managerDept = "";
+    private static string username = "";
+
+    private static string auditque = ".\\Private$\\" + System.Configuration.ConfigurationManager.AppSettings["Auditlog"];
+    private static string strCrudqueries = ".\\Private$\\" + System.Configuration.ConfigurationManager.AppSettings["Crudqueries"].Trim();
+    //private static string GroupDeptAdmin = System.Configuration.ConfigurationManager.AppSettings["Group1"];
+    //private static string GroupSchAdmin = System.Configuration.ConfigurationManager.AppSettings["Group2"];
+
+    CybWebServices.Service1 WebServ = null;
+    // localhost.Service1 WebServ = null;
+    WriteCrude rcq = null;
+    // CSingleAttribute cs = new CSingleAttribute();
+
+    // private static CWritetoqueue rq = null;
+    private static CPermit cp = null;
+
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        rq = (CWritetoqueue)Session["user"];
+        //LinkBtnEdit.Visible = false;
+        //LinkBtnWithdrawToken.Visible = false;
+        //LinkBtnViewToken.Visible = false;
+        if (rq == null)
+        {
+            return;
+        }
+
+        ActivePersonGroup = rq.Logonpermit.Usergroup;
+        if (ActivePersonGroup != GroupWebMaster)
+        {
+            msg = "You have no right to carry out transaction here, see your administrator";
+            showmassage(msg);
+            return;
+        }
+        ChkBoxPinEncrypt.Checked = true;
+        username = rq.Logonpermit.Userid;
+
+        //ChckBxManager.Width = 3000;
+        ChckBxMangerWithdr.Width = 3000;
+        //ChckBxManager.Height = 1000;
+        //ListBoxGIreq01
+        //GridView1.Width = 1300;
+        //RadioBtnFormat.SelectedIndex=1;
+        //ListBoxGIreq01.Height = 1000;
+    }
+    protected void BtnGIReqAdd2List_Click(object sender, EventArgs e)
+    {
+        //UpdateListBx3();
+        //TxtGIreqQty.Text = "";
+
+        //if (DDlistEditReqGIItems.Text == "OTHERS")
+        //{
+
+        //    TxtGIreqItem.Visible = true;
+        //    LabelDesc2.Visible = true;
+        //    TxtGIreqItem.Text = "";
+        //}
+        //else
+        //{
+        //    TxtGIreqItem.Visible = false;
+        //    LabelDesc2.Visible = false;
+        //}
+    }
+    private void UpdateListBx3()
+    {
+        //try
+        //{
+        //    ArrayList arr = null;// new ArrayList();
+        //    //ArrayList selectedItems = null;
+        //    //ArrayList itemswithNo = null;
+        //    ArrayList all = new ArrayList();
+        //    String message = "";
+        //    String ItemD = "";
+
+        //    //int cnt = 0;
+        //    //int req = 0;
+        //    int reqst = 0;
+        //    //int issued = 0;
+
+        //    if (int.TryParse(TxtGIreqQty.Text, out reqst))
+        //    {
+        //    }
+        //    else
+        //    {
+        //        msg = "Enter numeric value for quantity requested for";
+        //        showmassage(msg);
+        //        //PanelGin1.Visible = true;
+        //        TxtGIreqQty.Focus();
+        //        return;
+
+        //    }
+
+
+        //    if (DDlistEditReqGIItems.Text != "" && TxtGIreqQty.Text != "")
+        //    {
+
+        //        if (DDlistEditReqGIItems.Text == "OTHERS")
+        //        {
+
+        //            if (TxtGIreqItem.Text != "")
+        //            {
+        //                ItemD = TxtGIreqItem.Text.Trim().ToUpper().Replace("'", "''").Replace("|", "/");
+        //            }
+        //            else
+        //            {
+        //                msg = "Enter item description";
+        //                showmassage(msg);
+        //                //PanelGin1.Visible = true;
+        //                TxtGIreqItem.Focus();
+        //                return;
+
+        //            }
+        //        }
+        //        else
+        //        {
+        //            ItemD = DDlistEditReqGIItems.Text.Trim();
+        //        }
+
+        //    }
+
+        //    if (ItemD == "")
+        //    {
+        //        msg = "Enter item description or select items";
+        //        showmassage(msg);
+        //        //PanelGin1.Visible = true;
+        //        //TxtItemsreq.Focus();
+        //        return;
+        //    }
+        //    message = ItemD + "|" + TxtGIreqQty.Text.Trim();
+
+
+        //    int confr = 0;
+        //    if (message != "")
+        //    {
+
+
+        //        //foreach (string item in all)
+        //        //{
+        //        arr = new ArrayList();
+
+        //        int k = ListBoxGIreq.Items.Count;
+        //        if (k > 0)
+        //        {
+        //            for (int i = 0; i < k; i++)
+        //            {
+        //                arr.Add(ListBoxGIreq.Items[i].Text);
+        //            }
+        //            for (int hh = 0; hh < arr.Count; hh++)
+        //            {
+        //                string[] item = arr[hh].ToString().Split(new char[] { '|' });
+        //                int upp = item.GetUpperBound(0);
+        //                if (upp > 0)
+        //                {
+        //                    if (item[0].ToString() == ItemD)
+        //                    {
+        //                        confr++;
+        //                        break;
+        //                    }
+        //                }
+
+        //            }
+        //            if (confr == 0)
+        //            {
+        //                arr.Add(message);
+        //            }
+
+        //            ListBoxGIreq.Items.Clear();
+
+        //            foreach (string s in arr)
+        //            {
+        //                ListBoxGIreq.Items.Add(s);
+        //            }
+
+        //            //TxtQtyIssued.Text = "";
+        //            //TxtQtyAvail.Text = "";
+        //        }
+        //        else
+        //        {
+        //            ListBoxGIreq.Items.Add(message);
+        //        }
+        //        //}
+        //    }
+        //    else
+        //    {
+        //        msg = "No value to add to list";
+        //        showmassage(msg);
+        //        return;
+        //    }
+        //}
+        //catch (Exception ex)
+        //{
+        //    msg = ex.Message;
+        //    showmassage(msg);
+
+        //}
+    }
+    private void showmassage(string message)
+    {
+        message = message.Replace("'", " ").Replace("\r\n", "");
+        Label lbl = new Label();
+        lbl.Text = "<script language='javascript'>" + Environment.NewLine + "window.alert(" + "'" + message + "'" + ")</script>";
+        Page.Controls.Add(lbl);
+    }
+    protected void BtnGIReqRemAll_Click(object sender, EventArgs e)
+    {
+        //ListBoxGIreq.Items.Clear();
+    }
+    protected void BtnGIReqRemv1_Click(object sender, EventArgs e)
+    {
+        //try
+        //{
+
+        //    if (ListBoxGIreq.SelectedIndex >= 0)
+        //    {
+        //        int h = ListBoxGIreq.SelectedIndex;
+
+        //        if (h >= 0)
+        //        {
+        //            ListBoxGIreq.Items.RemoveAt(h);
+
+        //        }
+
+        //    }
+        //}
+        //catch (Exception ex)
+        //{
+        //    msg = ex.Message;
+        //    showmassage(msg);
+        //}
+    }
+    protected void BtnGIReqSubmit_Click(object sender, EventArgs e)
+    {
+        //try
+        //{
+
+        //    if (TxtDigit.Text.Trim() != "" && DDlistEditReqGI_GInumber.Text.Trim() != "")
+        //    {
+        //        //confirm if name and ponumber are right;
+
+        //        if (TxtQtyTokenGenerated.Text == "")
+        //        {
+        //            //TxtGIreqReqby.Text = TxtDept.Text.Trim();
+        //            msg = "Please, specify who made request";
+        //            showmassage(msg);
+        //            return;
+        //        }
+
+        //        if (TxtAuthorisedby.Text == "")
+        //        {
+        //            //TxtGIreqReqby.Text = TxtDept.Text.Trim();
+        //            msg = "Please, specify Authoriser";
+        //            showmassage(msg);
+        //            return;
+        //        }
+
+        //        if (DDListPurpseEdit.Text == "")
+        //        {
+        //            msg = "Please, specify purpose for your request";
+        //            showmassage(msg);
+        //            //TxtPurposeEdit.Focus();
+        //            return;
+        //        }
+
+
+        //        string tdate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+        //        int k = ListBoxGIreq.Items.Count;
+        //        string body = "";
+
+
+        //        int qtyOrdered = 0;
+        //        String ItemDescp = "";
+        //        int cnt = 0;
+
+        //        SqlConnection cnn = new SqlConnection(str);
+        //        cnn.Open();
+
+        //        SqlCommand cmd = null;
+        //        SqlDataReader dr = null;
+
+        //        //string ProductDesc = "";
+        //        string AssignBye = "";
+        //        string Editor = "";
+
+        //        if (Session["user"] != null)
+        //        {
+        //            rq = (CWritetoqueue)Session["user"];
+        //            AssignBye = rq.Logonpermit.Userid;
+        //            rq.Logonpermit.Direction = "GIN request Authorised by" + " " + TxtAuthorisedby.Text;// +" " + "to " + " " + TxtRequestby.Text.Trim();
+        //            rq.Writeaudit(rq.Logonpermit);
+        //        }
+
+        //        //cmd = new SqlCommand("SELECT [UserName]  FROM [InvetoryGIN_Request] where [GINumber]='" + DDlistEditReqGI_GInumber.Text.Trim() + "'", cnn);
+        //        //dr = cmd.ExecuteReader();
+        //        //if (dr.Read())
+        //        //{
+        //        //    Editor = dr.GetString(0);
+        //        //}
+        //        //dr.Dispose();
+        //        //cmd.Dispose();
+        //        //if (Editor.ToUpper() != AssignBye)
+        //        //{
+        //        //    msg = "You have no permission to edit this request, contact the person that makes the request";
+        //        //    showmassage(msg);
+        //        //    return;
+        //        //}
+
+        //        if (k > 0)
+        //        {
+        //            cmd = new SqlCommand("delete FROM [InvetoryGIN_Request] where [GINumber]='" + DDlistEditReqGI_GInumber.Text.Trim() + "'", cnn);
+        //            cmd.ExecuteNonQuery();
+        //            cmd.Dispose();
+
+        //            for (int j = 0; j < k; j++)
+        //            {
+        //                body = ListBoxGIreq.Items[j].Text;
+
+        //                string[] item = body.Split(new char[] { '|' });
+        //                int upp = item.GetUpperBound(0);
+        //                if (upp > 0)
+        //                {
+
+        //                    ItemDescp = item[0].ToString();
+
+        //                    qtyOrdered = int.Parse(item[1].ToString());
+
+        //                    //SELECT [Items],[QtyRequested],[GINumber],[ReqDept],[ReqBy],[TransDate],[Status] FROM [InvetoryGIN_Request]
+        //                    //cmd = new SqlCommand("INSERT INTO [InvetoryGIN]([Items],[ProductNumber],[QtyRequested],[QTYsupplied],[UnitPrice],[TotalPrice],[GINumber],[ReqDept],[ReqBy],[TransDate],[DispenseBY],[SerialNumbers])  VALUES('" + ItemDescp + "','" + ProductNumb + "'," + qtyOrdered + "," + qtySupplied + ",'" + unitprice + "'," + TotalPrice + ",'" + LabelGIN.Text.Trim() + "','" + DDListRequestDept.Text.Trim() + "','" + TxtRequestby.Text.Trim().ToUpper().Replace("'", "''") + "','" + tdate + "','" + AssignBye + "','" + Serial + "')", cnn);//ProductDesc
+        //                    cmd = new SqlCommand("INSERT INTO [InvetoryGIN_Request]([Items],[QtyRequested],[GINumber],[ReqDept],[ReqBy],[TransDate],[Status],UserName,Purpose,[AuthoriseBy],[AuthoriseStatus])  VALUES('" + ItemDescp + "'," + qtyOrdered + ",'" + DDlistEditReqGI_GInumber.Text.Trim() + "','" + TxtDigit.Text.Trim() + "','" + TxtQtyTokenGenerated.Text.Trim().ToUpper().Replace("'", "''") + "','" + tdate + "',0,'" + AssignBye + "','" + DDListPurpseEdit.Text + "','" + TxtAuthorisedby.Text + "',1)", cnn);//ProductDesc
+        //                    cmd.ExecuteNonQuery();
+        //                    cmd.Dispose();
+
+        //                    cnt++;
+
+        //                }
+        //            }
+
+
+        //            //Stage ii, split values into GRinventoryBreaks
+        //            //SplitItems();
+        //            //UpdateInventory();
+        //            //
+
+        //            msg = "Request approved successfully " + " " + " for " + " " + TxtDigit.Text;
+        //            showmassage(msg);
+        //            //return;
+        //            cnn.Dispose();
+        //            cnn.Close();
+
+        //            ListBoxGIreq.Items.Clear();
+        //            TxtQtyTokenGenerated.Text = "";
+        //            TxtDigit.Text = "";
+
+        //            //DDListPurpseEdit.Text = "";
+
+
+        //        }
+        //    }
+        //    else
+        //    {
+        //        msg = "Enter values in all fields above";
+        //        showmassage(msg);
+        //        return;
+        //    }
+        //}
+        //catch (Exception ex)
+        //{
+        //    msg = ex.Message;
+        //    showmassage(msg);
+        //}
+    }
+
+    //DDListItem_Changed
+    protected void DDListItem_Changed(object sender, EventArgs e)
+    {
+        //if (DDlistEditReqGIItems.Text != "")
+        //{
+        //    if (DDlistEditReqGIItems.Text == "OTHERS")
+        //    {
+
+        //        TxtGIreqItem.Visible = true;
+        //        LabelDesc2.Visible = true;
+        //    }
+        //    else
+        //    {
+        //        TxtGIreqItem.Visible = false;
+        //        LabelDesc2.Visible = false;
+        //    }
+        //}
+    }
+    protected void DDListItem01_Changed(object sender, EventArgs e)
+    {
+        //if (DDlistEditReqGIItems01.Text != "")
+        //{
+        //    if (DDlistEditReqGIItems01.Text == "OTHERS")
+        //    {
+
+        //        TxtGIreqItem01.Visible = true;
+        //        LabelDesc201.Visible = true;
+        //    }
+        //    else
+        //    {
+        //        TxtGIreqItem01.Visible = false;
+        //        LabelDesc201.Visible = false;
+        //    }
+        //}
+    }
+    protected void DDlistEditReqGI_GInumber_Changed(object sender, EventArgs e)
+    {
+        //ListBoxGIreq.Items.Clear();
+        //TxtQtyTokenGenerated.Text = "";
+        //TxtGIreqItem.Text = "";
+        //TxtGIreqQty.Text = "";
+        //if (DDlistEditReqGI_GInumber.Text != "")
+        //{
+        //    loadListBoxGIreq(DDlistEditReqGI_GInumber.Text.Trim());
+        //    //PanelEditGI.Visible = true;
+        //}
+    }
+    protected void DDlistEditReqGI_GInumber01_Changed(object sender, EventArgs e)
+    {
+        //ListBoxGIreq01.Items.Clear();
+        //TxtGIreqReqby01.Text = "";
+        //TxtGIreqItem01.Text = "";
+        //TxtQtyPerManager.Text = "";
+        //if (DDlistEditReqGI_GInumber01.Text != "")
+        //{
+        //    loadListBoxGIreq01(DDlistEditReqGI_GInumber01.Text.Trim());
+        //    //PanelEditGI.Visible = true;
+        //}
+    }
+
+    private void loadListBoxGIreq(string GINumb)
+    {
+        //try
+        //{
+        //    int qty = 0;
+        //    //String
+
+        //    SqlConnection cnn = new SqlConnection(str);
+        //    cnn.Open();
+
+        //    ListBoxGIreq.Items.Clear();
+        //    SqlCommand cmd = null;
+        //    SqlDataReader dr = null;
+        //    cmd = new SqlCommand("SELECT [Items],[QtyRequested],[ReqBy],[Purpose],[ReqDept] FROM [InvetoryGIN_Request] where [GINumber]='" + GINumb + "' and Status=0 and [AuthoriseStatus]=0", cnn);
+        //    dr = cmd.ExecuteReader();
+        //    while (dr.Read())
+        //    {
+        //        qty = int.Parse(dr.GetValue(1).ToString());
+        //        ListBoxGIreq.Items.Add(dr.GetString(0) + "|" + qty.ToString());
+        //        TxtQtyTokenGenerated.Text = dr.GetString(2);
+        //        DDListPurpseEdit.Text = dr.GetString(3);
+        //        TxtDigit.Text = dr.GetString(4);
+        //    }
+        //    dr.Dispose();
+        //    cmd.Dispose();
+        //    cnn.Dispose();
+        //    cnn.Close();
+
+        //}
+        //catch (Exception ex)
+        //{
+        //    msg = ex.Message;
+        //    showmassage(msg);
+        //}
+    }
+    protected void LinkBtnNewOrder_Click(object sender, EventArgs e)
+    {
+        GridView1.AutoGenerateSelectButton = false;
+        if (ActivePersonGroup == GroupWebMaster)
+        {
+            closeGrd();
+            MultiView1.ActiveViewIndex = 0;
+            //GetPlans();
+            //GenerateBatchNo();
+            TxtDigit.Focus();
+            RadioBtnFormat.SelectedIndex = 0;
+            //populateGridAvail();
+            populateGridAvail2();
+        }
+        else
+        {
+            msg = "You have no right to carry out transaction here, see your administrator";
+            showmassage(msg);
+            return;
+        }
+    }
+
+    private void GetPlans()
+    {
+        //try
+        //{
+        //    DDListPlans.Items.Clear();
+
+        //    ArrayList Plans = new ArrayList();
+
+        //    fsplansBusiness Pb = new fsplansBusiness();
+        //    //ModeOfStudysBusiness State = new ModeOfStudysBusiness();
+        //    Plans = Pb.GetPlans();// State.GetModesOfStudy();//..GetState();
+
+        //    foreach (string plns in Plans)
+        //    {
+        //        DDListPlans.Items.Add(plns);
+        //    }
+        //}
+        //catch (Exception ex)
+        //{
+        //    msg = ex.Message + "||" + ex.StackTrace.ToString();
+        //    showmassage(msg);
+        //}
+    }
+
+    private void GenerateBatchNo()
+    {
+        //string BatchNo = "";
+        //TempPinsBusiness pinb = new TempPinsBusiness();
+
+        //TxtBatchNo.Text = pinb.GetBatchNo(PrefixBatchNo, patternInt);
+    }
+
+    private void populateGridAvail2()
+    {
+        try
+        {
+
+            Sql = "SELECT [Pin],[Status],[UsedBy],[DateUsed],[GeneratedBy],[DateGenerated],[ExpirationDate],ExpirationStatus FROM [Pins]  where Status =0 and [UsedBy]='NONE' order by Pin";
+            exportheader = "[Pin],[Status],[UsedBy],[DateUsed],[GeneratedBy],[DateGenerated],[ExpirationDate],ExpirationStatus";
+            Exportfilename = "SubmittedPins";
+            GridCaption = "Submitted Pins";
+            GViewWidth = 800;
+            populateGridAvail();
+
+        }
+        catch (Exception ex)
+        {
+
+            msg = ex.Message + "||" + ex.StackTrace.ToString();
+            showmassage(msg);
+        }
+    }
+
+    private void populateGridAvail()
+    {
+        //try
+        //{
+        //    DataSet ds = new DataSet();
+        //    DataSet ds2 = new DataSet();
+        //    SqlConnection cnn = new SqlConnection(str);
+        //    cnn.Open();
+
+        //    SqlDataAdapter dat = new SqlDataAdapter(Sql, cnn);
+
+        //    dat.Fill(ds);
+        //    if (GViewWidth > 0)
+        //    {
+        //        GridView1.Width = GViewWidth;
+        //    }
+
+        //    GridView1.DataSource = ds;
+        //    Session["ds2"] = ds;
+
+        //    GridView1.DataBind();
+        //    GridView1.Caption = GridCaption + ":" + " " + "Total = " + " " + ds.Tables[0].Rows.Count.ToString();
+        //    GridView1.ToolTip = ds.Tables[0].Rows.Count.ToString();
+        //    GridView1.CaptionAlign = TableCaptionAlign.Left;
+        //    if (GridView1.Rows.Count > 0)
+        //    {
+        //        formatGridview();
+        //    }
+        //    //ChequePanelGridv.Visible = true;
+        //}
+        //catch (Exception ex)
+        //{
+
+        //    msg = ex.Message + "||" + ex.StackTrace.ToString();
+        //    showmassage(msg);
+        //}
+    }
+
+    private void populategrdv(DataSet query)
+    {
+        try
+        {
+
+            //WebServ = new CybWebServices.Service1();
+            DataSet ds = query;// WebServ.RetriveDat(query);
+            DataSet ds2 = new DataSet();
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                if (GViewWidth > 0)
+                {
+                    GridView1.Width = GViewWidth;
+                }
+
+                GridView1.DataSource = ds;
+                Session["ds2"] = ds;
+                GridView1.DataBind();
+
+                //if (ds.Tables[0].Rows.Count > 0)
+                //{
+                //    formatGridviewExp();
+                //}
+                GridView1.SelectedRowStyle.Wrap = true;
+                GridView1.Caption = GridCaption + ":" + " " + "Total = " + " " + ds.Tables[0].Rows.Count.ToString();
+                GridView1.ToolTip = ds.Tables[0].Rows.Count.ToString();
+                GridView1.CaptionAlign = TableCaptionAlign.Left;
+            }
+
+
+        }
+        catch (Exception ex)
+        {
+            msg = ex.Message + "||" + ex.StackTrace.ToString();
+            showmassage(msg);
+            LogError(msg, "School Portal", "");
+        }
+
+
+    }
+    private void formatGridview()
+    {
+
+        try
+        {
+            String datef = "";
+            DateTime datty;
+            double dd = 0.0;
+            int j = GridView1.HeaderRow.Cells.Count;//.Columns.Count;
+            int Amt = 0;
+            int collectiondate = 0;
+            int Transdate = 0;
+            int Duedate = 0;
+
+            for (int m = 0; m < j; m++)
+            {
+                //if (GridView1.HeaderRow.Cells[m].Text.ToUpper() == "PINS")
+                //{
+                //    Amt = m;
+                //}
+                if (GridView1.HeaderRow.Cells[m].Text == "ExpirationDate")
+                {
+                    collectiondate = m;
+                }
+                if (GridView1.HeaderRow.Cells[m].Text == "DateGenerated")
+                {
+                    Transdate = m;
+                }
+                if (GridView1.HeaderRow.Cells[m].Text == "DateUsed")
+                {
+                    Duedate = m;
+                }
+            }
+
+            Double Total = 0.0;
+            for (int i = 0; i < GridView1.Rows.Count; i++)
+            {
+                if (Amt != 0)
+                {
+                    // GridView1.Rows[i].Cells[7].BackColor = System.Drawing.Color.Yellow;
+                    dd = Double.Parse(GridView1.Rows[i].Cells[Amt].Text);
+                    GridView1.Rows[i].Cells[Amt].Text = String.Format("{0:N}", dd);
+                    Total = Total + dd;
+                }
+                if (collectiondate != 0)
+                {
+                    datty = Convert.ToDateTime(GridView1.Rows[i].Cells[collectiondate].Text);
+                    datef = datty.ToString("yyyy-MM-dd");//(GridView1.Rows[i].Cells[6].Text).ToString("yyyy-MM-dd");
+                    GridView1.Rows[i].Cells[collectiondate].Text = datef;
+                }
+                if (Transdate != 0)
+                {
+                    datty = Convert.ToDateTime(GridView1.Rows[i].Cells[Transdate].Text);
+                    datef = datty.ToString("yyyy-MM-dd HH:mm:ss");//(GridView1.Rows[i].Cells[6].Text).ToString("yyyy-MM-dd");
+                    GridView1.Rows[i].Cells[Transdate].Text = datef;
+                }
+                //
+                if (Duedate != 0)
+                {
+                    datty = Convert.ToDateTime(GridView1.Rows[i].Cells[Duedate].Text);
+                    datef = datty.ToString("yyyy-MM-dd");//(GridView1.Rows[i].Cells[6].Text).ToString("yyyy-MM-dd");
+                    GridView1.Rows[i].Cells[Duedate].Text = datef;
+                }
+
+            }
+
+            //string amount = "";
+            if (Total > 0.0)
+            {
+                LabelAmt1.Visible = true;
+                LabelAmt2.Text = String.Format("{0:N}", Total);//Total.ToString();
+                LabelAmt2.Visible = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            msg = ex.Message + "||" + ex.StackTrace.ToString();
+            showmassage(msg);
+        }
+    }
+    private void LoadGIN(string dept)
+    {
+        //try
+        //{
+        //    int qty = 0;
+        //    //String
+
+        //    SqlConnection cnn = new SqlConnection(str);
+        //    cnn.Open();
+
+        //    DDlistEditReqGI_GInumber.Items.Clear();
+        //    SqlCommand cmd = null;
+        //    SqlDataReader dr = null;
+        //    cmd = new SqlCommand("SELECT distinct GINumber FROM [InvetoryGIN_Request] where [AuthoriseStatus]= 0 and Status=0 and [ReqDept]='" + dept + "' order by GINumber desc", cnn);
+        //    dr = cmd.ExecuteReader();
+        //    while (dr.Read())
+        //    {
+        //        DDlistEditReqGI_GInumber.Items.Add(dr.GetString(0));
+        //        DDlistEditReqGI_GInumber.Text = dr.GetString(0);
+        //    }
+        //    dr.Dispose();
+        //    cmd.Dispose();
+        //    cnn.Dispose();
+        //    cnn.Close();
+
+        //    if (DDlistEditReqGI_GInumber.Items.Count > 0)
+        //    {
+        //        loadListBoxGIreq(DDlistEditReqGI_GInumber.Text);
+        //    }
+
+        //}
+        //catch (Exception ex)
+        //{
+        //    msg = ex.Message;
+        //    showmassage(msg);
+        //}
+    }
+
+    private void loadPurposeEdit()
+    {
+        //try
+        //{
+        //    SqlConnection cnn = new SqlConnection(str);
+        //    cnn.Open();
+
+        //    SqlCommand cmd = null;
+        //    SqlDataReader dr = null;
+
+        //    DDListPurpseEdit.Items.Clear();
+
+        //    cmd = new SqlCommand("SELECT [Purpose] FROM [PurposeReq] order by Purpose asc", cnn);
+        //    dr = cmd.ExecuteReader();
+        //    while (dr.Read())
+        //    {
+        //        DDListPurpseEdit.Items.Add(dr.GetString(0));
+        //    }
+        //    dr.Dispose();
+        //    cmd.Dispose();
+        //    cnn.Dispose();
+        //    cnn.Close();
+        //}
+        //catch (Exception ex)
+        //{
+        //    msg = ex.Message;
+        //    showmassage(msg);
+        //}
+    }
+
+    private void LoadEditGiItemsN()
+    {
+        //try
+        //{
+        //    SqlConnection cnn = new SqlConnection(str);
+        //    cnn.Open();
+
+        //    SqlCommand cmd = null;
+        //    SqlDataReader dr = null;
+
+        //    DDlistEditReqGIItems.Items.Clear();
+
+        //    cmd = new SqlCommand("SELECT distinct [Item] FROM [Items]", cnn);
+        //    dr = cmd.ExecuteReader();
+        //    while (dr.Read())
+        //    {
+        //        DDlistEditReqGIItems.Items.Add(dr.GetString(0));
+        //    }
+        //    dr.Dispose();
+        //    cmd.Dispose();
+        //    cnn.Dispose();
+        //    cnn.Close();
+
+        //    DDlistEditReqGIItems.Items.Add("OTHERS");
+        //}
+        //catch (Exception ex)
+        //{
+        //    msg = ex.Message;
+        //    showmassage(msg);
+        //}
+    }
+
+    private void LoadEditGIRequestDeptN()
+    {
+        //try
+        //{
+        //    SqlConnection cnn = new SqlConnection(str);
+        //    cnn.Open();
+
+        //    DDlistEditReqGIReqDept.Items.Clear();
+        //    SqlCommand cmd = null;
+        //    SqlDataReader dr = null;
+        //    cmd = new SqlCommand("SELECT distinct [ReqDept]  FROM [InvetoryGIN_Request]", cnn);
+        //    dr = cmd.ExecuteReader();
+        //    while (dr.Read())
+        //    {
+
+        //        DDlistEditReqGIReqDept.Items.Add(dr.GetString(0));
+        //        DDlistEditReqGIReqDept.Text = dr.GetString(0);
+        //    }
+        //    dr.Dispose();
+        //    cmd.Dispose();
+        //    cnn.Dispose();
+        //    cnn.Close();
+
+        //    //if (DDlistEditReqGIReqDept.Items.Count > 0)
+        //    //{
+        //    //    loadGINUmberN(DDlistEditReqGIReqDept.Text.Trim());
+        //    //    //loadGINUmber(DDlistEditReqGIReqDept.Text.Trim());
+
+        //    //}
+        //}
+        //catch (Exception ex)
+        //{
+
+        //    msg = ex.Message;
+        //    showmassage(msg);
+        //}
+    }
+
+    //private bool Confirm()
+    //{
+    //    //
+    //    bool rtn = false;
+
+    //    managerDept = "";
+    //    string user = "";
+    //    username = "";
+
+    //    rq = (CWritetoqueue)Session["user"];
+    //    if (rq != null)
+    //    {
+
+    //        SqlConnection cnn = new SqlConnection(str);
+    //        cnn.Open();
+
+    //        SqlCommand cmd = null;
+    //        SqlDataReader dr = null;
+
+    //        user = rq.Logonpermit.Userid;
+
+    //        cmd = new SqlCommand("SELECT [Name],[Mail],[Dept]  FROM [LineManagers] where [Mail]='" + user.Trim() + "'", cnn);
+    //        dr = cmd.ExecuteReader();
+    //        if (dr.Read())
+    //        {
+    //            username = dr.GetString(0);
+    //            managerDept = dr.GetString(2);
+    //            rtn = true;
+    //        }
+    //        dr.Dispose();
+    //        cmd.Dispose();
+    //        cnn.Dispose();
+    //        cnn.Close();
+    //    }
+
+    //    return rtn;
+    //}
+    protected void BtnExit_Click(object sender, EventArgs e)
+    {
+        Server.Transfer("Default.aspx?re=0");
+    }
+
+    protected void RadioBtnFormat_Changed(object sender, EventArgs e)
+    {
+        if (RadioBtnFormat.SelectedItem.Text == "Numeric")
+        {
+            PinFormat = "Numeric";
+        }
+        else
+        {
+            PinFormat = "AlphaNumeric";
+        }
+    }
+    protected void BtnGIReqClose_Click(object sender, EventArgs e)
+    {
+        MultiView1.ActiveViewIndex = -1;
+    }
+    protected void LinkBtnExit_Click(object sender, EventArgs e)
+    {
+        Server.Transfer("Default.aspx?re=0");
+    }
+    protected void LinkBtnEdit_Click(object sender, EventArgs e)
+    {
+        //if (ActivePersonGroup == "ADMINISTRATOR-INVENTORY" || ActivePersonGroup == "GENERAL")
+        //{
+        closeGrd();
+
+        GridView1.AutoGenerateSelectButton = true;
+        MultiView1.ActiveViewIndex = 1;
+        loadUserId();
+        populateGridAvail2();
+        TxtPin.Focus();
+
+        //}
+        //else
+        //{
+        //    msg = "You have no right to carry out transaction here, see your administrator";
+        //    showmassage(msg);
+        //    return;
+        //}
+        //if (Confirm() == true)
+        //{
+        //    MultiView1.ActiveViewIndex = 1;
+        //    //TxtAuthorisedby01.Text = username;
+        //    LoadGIN01(managerDept);
+        //    //LoadEditGIRequestDeptN();
+        //    LoadEditGiItemsN01();
+        //    loadPurposeEdit01();
+
+        //    TxtGIreqItem01.Visible = false;
+        //    LabelDesc201.Visible = false;
+        //}
+        //else
+        //{
+        //    msg = "You have no right to carry out transaction here, see your administrator";
+        //    showmassage(msg);
+        //    return;
+        //}
+    }
+
+    private void populateGridAvail02()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void closeGrd2()
+    {
+
+    }
+
+    private void loadUserId()
+    {
+        try
+        {
+            int qty = 0;
+
+            DDListUserId.Items.Clear();
+
+            string qry1 = "SELECT [UserId] FROM [AdminUsers] where  [UserStatus] = 1";
+            //string  qry1 = "SELECT [UserId] FROM [AdminUsers] where [usergroup] ='" + GroupGuest + "' and [UserStatus] = 1";
+            WebServ = new CybWebServices.Service1();
+            DataSet ds = WebServ.RetriveDat(qry1);
+            string Uid = "";
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                for (int jj = 0; jj < ds.Tables[0].Rows.Count; jj++)
+                {
+                    Uid = ds.Tables[0].Rows[jj][0].ToString().ToUpper();
+                    DDListUserId.Items.Add(Uid);
+                }
+            }
+
+        }
+        catch (Exception ex)
+        {
+            msg = ex.Message;
+            showmassage(msg);
+        }
+    }
+    protected void GridView1_OnPageIndexChanging(object sender, GridViewPageEventArgs e)
+    {
+        DataSet ds3 = null;
+        if (Session["ds2"] != null)
+        {
+            ds3 = (DataSet)Session["ds2"];
+            GridView1.Width = GViewWidth;
+            GridView1.DataSource = ds3;
+            GridView1.PageIndex = e.NewPageIndex;
+
+
+            //if (ds3.Tables[0].Rows.Count > 0)
+            //{
+            //    formatGridviewExp();
+            //}
+
+            GridView1.DataBind();
+            GridView1.Caption = GridCaption + ":" + " " + "Total = " + " " + ds3.Tables[0].Rows.Count.ToString();
+            GridView1.ToolTip = ds3.Tables[0].Rows.Count.ToString();
+            GridView1.CaptionAlign = TableCaptionAlign.Left;
+
+        }
+
+    }
+
+    protected void BtnGIReqSubmit01_Click(object sender, EventArgs e)
+    {
+
+        if (TxtPin.Text.Trim() == "" || DDListUserId.Text == "")
+        {
+            msg = "Please, enter pin and user id";
+            showmassage(msg);
+            return;
+        }
+
+        string AssignedBy = username;
+        if (AssignedBy == "")
+        {
+            return;
+        }
+
+        CSingleAttribute cs = null;// new CSingleAttribute();
+        rq = (CWritetoqueue)Session["user"];
+
+
+        string DateUsed = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+        string DateGenerated2 = DateTime.Now.ToString("yyyy-MM-dd 23:59:59.999");
+
+        if (PinExpInterval == "")
+        {
+            msg = "Please, specify pin expiration date";
+            showmassage(msg);
+            return;
+        }
+
+        string pattern1 = ConfigurationManager.AppSettings["regexint"];
+        MatchCollection mc1 = Regex.Matches(PinExpInterval, pattern1);
+        int interval = 0;
+        string ExtDate = "";
+
+        for (int i = 0; i < mc1.Count; i++)
+        {
+            interval = int.Parse(mc1[0].ToString());
+        }
+
+        DateTime dt;
+        if (PinExpInterval.Contains("Months") || PinExpInterval.Contains("Month"))
+        {
+            dt = DateTime.Today.AddMonths(interval);
+
+            ExtDate = dt.ToShortDateString();
+        }
+        else
+        {
+            dt = DateTime.Today.AddDays(interval);
+
+            ExtDate = dt.ToShortDateString();
+        }
+
+        string Qry = "SELECT * from [Pins] where [Pin]='" + TxtPin.Text.Trim() + "' and [Status]=0";
+        if (Exist(Qry))
+        {
+            cs = new CSingleAttribute();
+            cs.ActionType = "INSERT";
+            cs.MethodName = "BtnAssign_Click";
+            cs.SourceClass = "Token";
+            cs.DateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            cs.SourceApplication = "JobVacancy";
+            cs.ActionBody = "Update [Pins] set Status = 1, UsedBy='" + DDListUserId.Text.Trim() + "',DateUsed ='" + DateUsed + "',ExpirationDate='" + ExtDate + "',AssignedBy='" + AssignedBy + "' where [Pin]='" + TxtPin.Text.Trim() + "'";
+            //cs.ActionBody = "insert into Company ([CompanyID],[BusinessName],[ContactPerson],[Title],[Address],[Phone],[Email],Logopath,status,[CompanyUrl]) values('" + TxtSupplierID.Text.Trim() + "','" + TxtBuzName.Text.Trim() + "','" + TxtContactPerson.Text.Trim() + "','" + TxtTitle.Text.Trim() + "','" + TxtSupplierAddress.Text.Trim() + "','" + TxtPhone.Text + "','" + TxtMail.Text + "','" + PixName + "',1,'" + url + "') ";
+            sendQuery(cs);
+
+            rq.Logonpermit.Direction = TxtPin.Text + " " + "pin assigned by " + " " + username + " " + " to user " + " " + DDListUserId.Text;
+            rq.Writeaudit(rq.Logonpermit);
+
+
+
+
+            Sql = "SELECT [Pin],[Status],[UsedBy],[DateUsed],[GeneratedBy],[DateGenerated],[ExpirationDate],ExpirationStatus,AssignedBy FROM [Pins]  where Status=0 order by Pin";
+            exportheader = "[Pin],[Status],[UsedBy],[DateUsed],[GeneratedBy],[DateGenerated],[ExpirationDate],ExpirationStatus,AssignedBy";
+            Exportfilename = "SubmittedPins";
+            GridCaption = "Submitted Pins";
+            GViewWidth = 800;
+            populateGridAvail();
+
+            msg = "Update successful";
+            showmassage(msg);
+
+
+
+        }
+
+
+
+    }
+    private void sendtoMailQueue(CMail cm)
+    {
+        try
+        {
+            DefaultPropertiesToSend dfp = new DefaultPropertiesToSend();
+            dfp.AttachSenderId = true;
+            dfp.Recoverable = true;
+
+            MessageQueue mq;
+            if (!MessageQueue.Exists(NotifyschedulmailPath))
+            {
+                mq = MessageQueue.Create(NotifyschedulmailPath);
+                mq.SetPermissions("Everyone", MessageQueueAccessRights.FullControl);
+
+            }
+            else
+            {
+                mq = new MessageQueue(NotifyschedulmailPath);
+                mq.Formatter = new XmlMessageFormatter(new Type[] { typeof(CMail) });
+                mq.DefaultPropertiesToSend = dfp;
+            }
+
+
+            mq.DefaultPropertiesToSend.Recoverable = true;
+            mq.DefaultPropertiesToSend.AttachSenderId = true;
+            mq.DefaultPropertiesToSend.Label = "Cheque payment " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            mq.Send(cm);
+            mq.Dispose();
+            mq.Close();
+
+        }
+        catch (Exception er)
+        {
+
+            string err = er.Message;
+        }
+    }
+    private ArrayList getToken(int qty)
+    {
+        ArrayList ar = new ArrayList();
+
+        SqlConnection cnn = new SqlConnection(str);
+        cnn.Open();
+
+        SqlCommand cmd = null;
+        SqlDataReader dr = null;
+        cmd = new SqlCommand("SELECT top(" + qty + ")Token  FROM [Token] where [Status]=0 and [Manager]='NONE'", cnn);
+        dr = cmd.ExecuteReader();
+        while (dr.Read())
+        {
+            ar.Add(dr.GetString(0));
+        }
+
+        dr.Dispose();
+        cmd.Dispose();
+
+        cnn.Dispose();
+        cnn.Close();
+        return ar;
+
+    }
+
+    private bool IsEnoughToken(int totqty)
+    {
+        bool rtn = false;
+
+        SqlConnection cnn = new SqlConnection(str);
+        cnn.Open();
+
+        SqlCommand cmd = null;
+        SqlDataReader dr = null;
+        cmd = new SqlCommand("SELECT count(*) FROM [Token] where [Status]=0 and [Manager]='NONE'", cnn);
+        int k = (int)cmd.ExecuteScalar();
+
+        cmd.Dispose();
+
+        if (k >= totqty)
+        {
+            rtn = true;
+        }
+        cnn.Dispose();
+        cnn.Close();
+
+
+        return rtn;
+    }
+    protected void BtnGIReqClose01_Click(object sender, EventArgs e)
+    {
+
+        closeGrd();
+        MultiView1.ActiveViewIndex = -1;
+    }
+    protected void BtnToken_Click(object sender, EventArgs e)
+    {
+        MultiView1.ActiveViewIndex = 0;
+        //TxtAuthorisedby.Text = username;
+        LoadGIN(managerDept);
+        //LoadEditGIRequestDeptN();
+        LoadEditGiItemsN();
+        loadPurposeEdit();
+
+        //TxtGIreqItem.Visible = false;
+        //LabelDesc2.Visible = false;
+    }
+    protected void BtnCloseToken_Click(object sender, EventArgs e)
+    {
+        MultiView1.ActiveViewIndex = -1;
+    }
+
+    //GridView1_Selected
+    protected void GridView1_Selected(object sender, EventArgs e)
+    {
+
+
+        int i = 0;
+
+        i = GridView1.SelectedIndex;
+        string Pin = GridView1.Rows[i].Cells[1].Text;
+        TxtPin.Text = Pin;
+
+        GridView1.Width = 800;
+        //loadInfo(inf);
+        //try
+        //{
+        //    int j = GridView1.HeaderRow.Cells.Count;//.Columns.Count;
+        //    int Jid = 0;
+        //    int OldUid = 0;
+        //    int ExpStatus = 0;
+
+        //    for (int m = 0; m < j; m++)
+        //    {
+        //        if (GridView1.HeaderRow.Cells[m].Text.ToUpper() == "JOBID")
+        //        {
+        //            Jid = m;
+        //        }
+        //        if (GridView1.HeaderRow.Cells[m].Text.ToUpper() == "JOBPOSTEDBY")
+        //        {
+        //            OldUid = m;
+        //        }
+        //        if (GridView1.HeaderRow.Cells[m].Text.ToUpper() == "EXPIREDSTATUS")
+        //        {
+        //            ExpStatus = m;
+        //        }
+
+        //    }
+        //    //pick col headers
+
+        //    //Check if the person is 4 d company
+        //    int i = 0;
+
+        //    //i = GridView1.SelectedIndex;//.EditIndex;//.SelectedIndex;
+        //    i = e.NewEditIndex;
+        //    string JobId = GridView1.Rows[i].Cells[Jid].Text;
+        //    string OldJobId = GridView1.Rows[i].Cells[OldUid].Text;
+        //    int status = int.Parse(GridView1.Rows[i].Cells[ExpStatus].Text);
+
+        //    int k = status;
+        //    if (k == 1)
+        //    {
+        //    }
+        //    else
+        //    {
+        //        msg = "This job is expired";
+        //        showmassage(msg);
+        //        return;
+        //    }
+
+        //    string UserId = rq.Logonpermit.Userid;
+
+        //    if (UserId.ToUpper().Trim() == OldJobId.ToUpper().Trim() || rq.Logonpermit.Usergroup.ToUpper() == GroupWebMaster)
+        //    {
+        //        RtrieveJob(JobId, UserId);
+        //    }
+        //    else
+        //    {
+        //        msg = "You have no permission to edit this job, contact the administrator";
+        //        showmassage(msg);
+        //        return;
+        //    }
+
+
+        //}
+        //catch (Exception ex)
+        //{
+        //    msg = ex.Message + "||" + ex.StackTrace.ToString();
+        //    showmassage(msg);
+        //    LogError(msg, "Job Vacancy", "");
+        //}
+    }
+    protected void LinkBtnViewToken_Click(object sender, EventArgs e)
+    {
+        //if (ActivePersonGroup == "ADMINISTRATOR-INVENTORY" || ActivePersonGroup == "GENERAL" || ActivePersonGroup == "SUPER_USERS-INVENTORY")
+        //{
+        GridView1.AutoGenerateSelectButton = false;
+        closeGrd();
+        //PanelSchedulhist.Visible = true;
+        TxtStartdate.Visible = false;
+        TxtEnddate.Visible = false;
+        LabelEdate.Visible = false;
+        LabelSdate.Visible = false;
+        DDListStatus.Visible = false;
+        //DDListbanks.Visible = false;
+        LabelAmt2.Visible = false;
+        LabelAmt1.Visible = false;
+
+        Panensearch.Visible = true;
+        loadStatus();
+        MultiView1.ActiveViewIndex = 3;
+        //}
+        //else
+        //{
+        //    msg = "You have no right to carry out transaction here, see your administrator";
+        //    showmassage(msg);
+        //    return;
+        //}
+    }
+    protected void ChkBoxDate_Check(object ob, EventArgs e)
+    {
+        TxtStartdate.Visible = true;
+        TxtEnddate.Visible = true;
+        LabelSdate.Visible = true;
+        LabelEdate.Visible = true;
+
+        if (ChkBoxDate.Checked == false)
+        {
+            TxtStartdate.Visible = false;
+            TxtEnddate.Visible = false;
+            LabelSdate.Visible = false;
+            LabelEdate.Visible = false;
+        }
+        //if (ChkBoxStatus.Checked)
+        //{
+        //    DDListStatus.Visible = true;
+        //}
+
+    }
+    private void loadStatus()
+    {
+        DDListStatus.Items.Clear();
+        DDListStatus.Items.Add("Used Summery");
+        DDListStatus.Items.Add("Used Pins");
+        DDListStatus.Items.Add("Avail Summary");
+        DDListStatus.Items.Add("Avail Pins");
+        DDListStatus.Visible = true;
+        //DDListStatus.Items.Add("Used Tokens");
+    }
+    protected void LinkBtnExport_Click(object sender, EventArgs e)
+    {
+        if (PinPreview == true)
+        {
+            msg = "Please make sure these pins are submitted before using them";
+            showmassage(msg);
+        }
+
+
+        string header = exportheader;
+        string filename = Exportfilename;
+        ExportData(header, filename);
+    }
+
+    private void formatGridviewExp()
+    {
+        try
+        {
+            String datef = "";
+            DateTime datty;
+            double dd = 0.0;
+            int j = GridView1.HeaderRow.Cells.Count;//.Columns.Count;
+            int Pin = 0;
+            int collectiondate = 0;
+            int Transdate = 0;
+            int Duedate = 0;
+
+            for (int m = 0; m < j; m++)
+            {
+                if (GridView1.HeaderRow.Cells[m].Text.ToUpper() == "PINS")
+                {
+                    Pin = m;
+                }
+                
+            }
+
+            Double Total = 0.0;
+            for (int i = 0; i < GridView1.Rows.Count; i++)
+            {
+                if (Pin != 0)
+                {
+                    
+                    //dd = Double.Parse(GridView1.Rows[i].Cells[Amt].Text);
+
+                    string pins = GridView1.Rows[i].Cells[Pin].Text;
+                    GridView1.Rows[i].Cells[Pin].Text = "";
+                    GridView1.Rows[i].Cells[Pin].Text = CyberDecryptor.Decryption(pins, Key);
+                    //GridView1.Rows[i].Cells[Amt].Text = String.Format("{0:N}", dd);
+                    //Total = Total + dd;
+                }                
+
+            }
+
+            
+        }
+        catch (Exception ex)
+        {
+            msg = ex.Message + "||" + ex.StackTrace.ToString();
+            showmassage(msg);
+        }
+    }
+    private void ExportData(string header, string filename)
+    {
+        StringBuilder stb = new StringBuilder();
+
+        stb.Append(header);
+        stb.AppendLine();
+        DataSet ds = new DataSet();
+
+        String msg;
+        int j;
+        int k;
+        int i;
+        int m;
+        string PinHeader = "";
+        string content = "";
+        try
+        {
+            if (Session["ds2"] != null)
+            {
+                ds = (DataSet)Session["ds2"];
+                j = ds.Tables[0].Columns.Count;
+                //j = j - 1;
+                k = ds.Tables[0].Rows.Count;           
+
+                for (i = 0; i < k; i++)//rows
+                {
+                    for (m = 0; m < j; m++)//col
+                    {                        
+                        if (m == 0)
+                        {
+                            //string pins = GridView1.Rows[i].Cells[Pin].Text;
+                            //GridView1.Rows[i].Cells[Pin].Text = "";
+                            //GridView1.Rows[i].Cells[Pin].Text = CyberDecryptor.Decryption(pins, Key);
+
+                            content = ds.Tables[0].Rows[i][m].ToString().Replace(",", ";").ToLower().Replace("\r\n", "");
+                            stb.Append(content);
+                        }
+                        else
+                        {
+                            if (m == 1)
+                            {
+                                content = CyberDecryptor.Decryption(ds.Tables[0].Rows[i][m].ToString(), Key);
+                            }
+                            else
+                            {
+                                content = ds.Tables[0].Rows[i][m].ToString().Replace(",", ";").ToLower().Replace("\r\n", "");
+                            }
+                            //content = "," + ds.Tables[0].Rows[i][m].ToString().Replace(",", ";").ToLower().Replace("\r\n", "");
+                            stb.Append("," + content);
+                        }
+
+                    }
+                    stb.AppendLine();
+                }
+
+
+                Response.Clear();
+                Response.AddHeader("content-disposition", "attachment;filename=" + filename + DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv");
+                Response.Charset = "";
+                Response.Cache.SetCacheability(HttpCacheability.NoCache);
+                Response.ContentType = "application/vnd.csv";
+                System.IO.StringWriter stringWrite = new System.IO.StringWriter();
+                System.Web.UI.HtmlTextWriter htmlWrite = new HtmlTextWriter(stringWrite);
+                Response.Write(stb.ToString());
+                Response.End();
+            }
+            else
+            {
+                msg = "Specify what you want to Export";
+                showmassage(msg);
+                //TxtMsisdn.Focus();
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+
+            msg = ex.Message;
+            showmassage(msg);
+            return;
+
+        }
+    }
+    protected void BtnCloseGen_Click(object sender, EventArgs e)
+    {
+        closeGrd();
+        //populateGridAvail();
+        MultiView1.ActiveViewIndex = -1;
+
+
+    }
+
+    private void closeGrd()
+    {
+
+
+        try
+        {
+            DataSet ds = new DataSet();
+
+            ds = null;
+            GridView1.DataSource = ds;
+            Session["ds2"] = ds;
+
+            GridView1.DataBind();
+
+        }
+        catch (Exception ex)
+        {
+
+            msg = ex.Message + "||" + ex.StackTrace.ToString();
+            showmassage(msg);
+        }
+    }
+    protected void LinkBtnWithdrawToken_Click(object sender, EventArgs e)
+    {
+        //if (ActivePersonGroup == "ADMINISTRATOR-INVENTORY" || ActivePersonGroup == "GENERAL" || ActivePersonGroup == "SUPER_USERS-INVENTORY")
+        //{
+        GridView1.AutoGenerateSelectButton = false;
+        MultiView1.ActiveViewIndex = 2;
+        closeGrd();
+        //MultiView1.ActiveViewIndex = 1;
+        loadLineManagers2();
+        populateGridAvail2();
+        //TxtQtyPerManager.Focus();
+        ////}
+        ////else
+        ////{
+        //    msg = "You have no right to carry out transaction here, see your administrator";
+        //    showmassage(msg);
+        //    return;
+        //}
+    }
+
+    private void loadLineManagers2()
+    {
+        try
+        {
+            int qty = 0;
+            //String
+
+            SqlConnection cnn = new SqlConnection(str);
+            cnn.Open();
+
+            ChckBxMangerWithdr.Items.Clear();
+
+            SqlCommand cmd = null;
+            SqlDataReader dr = null;
+            cmd = new SqlCommand("SELECT [Name],[Mail],[Dept] FROM [LineManagers]", cnn);
+            dr = cmd.ExecuteReader();
+            while (dr.Read())
+            {
+                ChckBxMangerWithdr.Items.Add(dr.GetString(0) + "|" + dr.GetString(1) + "|" + dr.GetString(2));
+            }
+            dr.Dispose();
+            cmd.Dispose();
+            cnn.Dispose();
+            cnn.Close();
+
+        }
+        catch (Exception ex)
+        {
+            msg = ex.Message;
+            showmassage(msg);
+        }
+    }
+    protected void BtnWithdrtoken_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            string Manager = "";
+            string Mail = "";
+            string Dept = "";
+            int Status = 0;
+            string DateUsed = "";
+            string GINumber = "";
+            string AssignedBy = username;
+            if (AssignedBy == "")
+            {
+                return;
+            }
+            //string AssignedBy = "";
+            string DateGenerated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            string DateGenerated2 = DateTime.Now.ToString("yyyy-MM-dd 23:59:59.999");
+
+
+            SqlConnection cnn = new SqlConnection(str);
+            cnn.Open();
+
+            SqlCommand cmd = null;
+            SqlDataReader dr = null;
+
+            int k = ChckBxMangerWithdr.Items.Count;
+
+            if (k > 0)
+            {
+                int count = 0;
+                for (int h = 0; h < k; h++)
+                {
+                    if (ChckBxMangerWithdr.Items[h].Selected)
+                    {
+                        count++;
+                    }
+                }
+
+                if (count == 0 || count < 0)
+                {
+                    msg = "Check managers";
+                    showmassage(msg);
+                    return;
+                }
+
+
+                int cnt = 0;
+
+                for (int j = 0; j < k; j++)
+                {
+                    if (ChckBxMangerWithdr.Items[j].Selected)
+                    {
+                        string body = ChckBxMangerWithdr.Items[j].Text;
+
+                        string[] item = body.Split(new char[] { '|' });
+                        int upp = item.GetUpperBound(0);
+                        if (upp > 0)
+                        {
+
+                            Manager = item[0].ToString();
+                            Mail = item[1].ToString();
+                            Dept = item[2].ToString();
+
+
+
+                            cmd = new SqlCommand("UPDATE [Token] SET [Manager] = 'NONE',[Mail] = 'NONE',[Dept] = 'NONE',[AssignedBy] ='NONE' WHERE [Mail]='" + Mail + "' and [Status]=0 ", cnn);//ProductDesc
+                            cmd.ExecuteNonQuery();
+                            cmd.Dispose();
+
+
+                            if (Session["user"] != null)
+                            {
+                                rq = (CWritetoqueue)Session["user"];
+                                // AssignBye = rq.Logonpermit.Userid;
+                                rq.Logonpermit.Direction = "Tokens withdrawn from " + " " + Manager + " " + "by " + " " + username;
+                                rq.Writeaudit(rq.Logonpermit);
+                            }
+                        }
+                    }
+
+                }
+                msg = count.ToString() + " " + "line managers token withdrawn successfully";
+                showmassage(msg);
+                populateGridAvail2();
+
+            }
+        }
+        catch (Exception ex)
+        {
+            msg = ex.Message;
+            showmassage(msg);
+        }
+    }
+    protected void BtnWithdrClose_Click(object sender, EventArgs e)
+    {
+        closeGrd();
+        MultiView1.ActiveViewIndex = -1;
+
+    }
+    protected void BtnSubmitToken_Click(object sender, EventArgs e)
+    {
+        ArrayList tokk = new ArrayList();
+        PinPreview = false;
+
+        string qry = "";// "Select [Pin] from [PinTemp]";
+
+        //WebServ = new CybWebServices.Service1();
+        //DataSet ds00 = WebServ.RetriveDat(qry);
+        string Pin = "";
+
+        //fsplansBusiness Pb = new fsplansBusiness();
+        //fsplans PlanData = new fsplans();
+
+        //if (DDListPlans.Text.Trim() != "")
+        //{
+        //    DataSet Plans = new DataSet();
+        //    Plans = Pb.GetPlansSchema(DDListPlans.Text.Trim());
+
+        //    if (Plans.Tables[0].Rows.Count > 0)
+        //    {              
+
+        //        for (int jj = 0; jj < Plans.Tables[0].Rows.Count; jj++)
+        //        {
+
+        //            string Pname = Plans.Tables[0].Rows[jj][0].ToString().ToUpper();
+        //            string TimeLeft = Plans.Tables[0].Rows[jj][1].ToString().ToUpper();
+        //            string Btul = Plans.Tables[0].Rows[jj][2].ToString().ToUpper();
+        //            string Btdl = Plans.Tables[0].Rows[jj][3].ToString().ToUpper();
+        //            string Bwquota = Plans.Tables[0].Rows[jj][4].ToString().ToUpper();
+        //            string Bwcount = Plans.Tables[0].Rows[jj][5].ToString().ToUpper();
+        //            string BwquotaUl = Plans.Tables[0].Rows[jj][6].ToString().ToUpper();
+        //            string BwcountUL = Plans.Tables[0].Rows[jj][7].ToString().ToUpper();
+        //            string BwquotaSha = Plans.Tables[0].Rows[jj][8].ToString().ToUpper();
+        //            string BwcountSha = Plans.Tables[0].Rows[jj][9].ToString().ToUpper();
+        //            string Status = Plans.Tables[0].Rows[jj][10].ToString().ToUpper();
+        //            string Startmod = Plans.Tables[0].Rows[jj][11].ToString().ToUpper();                    
+        //            string Edate = Plans.Tables[0].Rows[jj][12].ToString().ToUpper();
+        //            string Sdate = Plans.Tables[0].Rows[jj][13].ToString().ToUpper();
+        //            string Logins = Plans.Tables[0].Rows[jj][14].ToString().ToUpper();
+        //            string Eminutes = Plans.Tables[0].Rows[jj][15].ToString().ToUpper();
+        //            string Auto_del = Plans.Tables[0].Rows[jj][16].ToString().ToUpper();
+        //            string Bwrmethod = Plans.Tables[0].Rows[jj][17].ToString().ToUpper();
+        //            string Bwrperiod = Plans.Tables[0].Rows[jj][18].ToString().ToUpper();
+        //            string Bwrdate = Plans.Tables[0].Rows[jj][19].ToString().ToUpper();
+        //            string ReqSignUp = Plans.Tables[0].Rows[jj][20].ToString().ToUpper();
+        //            string Pagenum = Plans.Tables[0].Rows[jj][21].ToString().ToUpper();
+        //            string Acl = Plans.Tables[0].Rows[jj][22].ToString().ToUpper();
+        //            string Roption = Plans.Tables[0].Rows[jj][23].ToString().ToUpper();
+        //            string Rsdate = Plans.Tables[0].Rows[jj][24].ToString().ToUpper();
+        //            string Redate = Plans.Tables[0].Rows[jj][25].ToString().ToUpper();
+        //            string Weeksch = Plans.Tables[0].Rows[jj][26].ToString().ToUpper();
+        //            string Resetopt = Plans.Tables[0].Rows[jj][27].ToString().ToUpper();
+        //            string Macmap = Plans.Tables[0].Rows[jj][28].ToString().ToUpper();
+        //            string Ipmap = Plans.Tables[0].Rows[jj][29].ToString().ToUpper();
+        //            //[pname],[timeLeft],[btul],[btdl],[bwquota],[bwcount],[bwquotaUl]
+        //            //,[bwcountUL],[bwquotaSha],[bwcountSha],[status],[startmod],[edate]
+        //            //,[sdate],[logins],[eminutes],[auto_del],[bwrmethod],[bwrperiod],[bwrdate],
+        //            //[ReqSignUp],[pagenum],[acl],[roption],[rsdate],[redate],[weeksch],[resetopt]
+        //            //,[macmap],[ipmap]
+
+        //            if (Pname != "")
+        //            {
+        //                PlanData.Pname = Pname;
+        //            }
+
+        //            if (TimeLeft != "")
+        //            {
+        //                PlanData.TimeLeft =int.Parse(TimeLeft);
+        //            }                    
+
+        //            if (Btul != "")
+        //            {
+        //                PlanData.Btul = int.Parse(Btul);
+        //            }                    
+
+        //            if (Btdl != "")
+        //            {
+        //                PlanData.Btdl = int.Parse(Btdl);
+        //            }                    
+
+        //            if (Bwquota != "")
+        //            {
+        //                PlanData.Bwquota = double.Parse(Bwquota);
+        //            }                    
+
+        //            if (Bwcount != "")
+        //            {
+        //                PlanData.Bwcount = int.Parse(Bwcount);
+        //            }                    
+
+        //            if (BwquotaUl != "")
+        //            {
+        //                PlanData.BwquotaUl = double.Parse(BwquotaUl);
+        //            }                    
+
+        //            if (BwcountUL != "")
+        //            {
+        //                PlanData.BwcountUL = int.Parse(BwcountUL);
+        //            }                    
+
+        //            if (BwquotaSha != "")
+        //            {
+        //                PlanData.BwquotaSha = double.Parse(BwquotaSha);
+        //            }                    
+
+        //            if (BwcountSha != "")
+        //            {
+        //                PlanData.BwcountSha = int.Parse(BwcountSha);
+        //            }                    
+
+        //            if (Status != "")
+        //            {
+        //                PlanData.Status = int.Parse(Status);
+        //            }                    
+
+        //            if (Startmod != "")
+        //            {
+        //                PlanData.Startmod = int.Parse(Startmod);
+        //            }                                       
+
+        //            if (Edate != "")
+        //            {
+        //                PlanData.Edate = Edate;
+        //            }                    
+
+        //            if (Sdate != "")
+        //            {
+        //                PlanData.Sdate = Sdate;
+        //            }                    
+
+        //            if (Logins != "")
+        //            {
+        //                PlanData.Logins = int.Parse(Logins);
+        //            }                    
+
+        //            if (Eminutes != "")
+        //            {
+        //                PlanData.Eminutes = int.Parse(Eminutes);
+        //            }                    
+
+        //            if (Auto_del != "")
+        //            {
+        //                PlanData.Auto_del = int.Parse(Auto_del);
+        //            }                    
+
+        //            if (Bwrmethod != "")
+        //            {
+        //                PlanData.Bwrmethod = Bwrmethod;
+        //            }                    
+
+        //            if (Bwrperiod != "")
+        //            {
+        //                PlanData.Bwrperiod = int.Parse(Bwrperiod);
+        //            }                    
+
+        //            if (Bwrdate != "")
+        //            {
+        //                PlanData.Bwrdate = int.Parse(Bwrdate);
+        //            }                    
+
+        //            if (ReqSignUp != "")
+        //            {
+        //                PlanData.ReqSignUp = ReqSignUp;
+        //            }                    
+
+        //            if (Pagenum != "")
+        //            {
+        //                PlanData.Pagenum = int.Parse(Pagenum);
+        //            }                    
+
+        //            if (Acl != "")
+        //            {
+        //                PlanData.Acl = Acl;
+        //            }                    
+
+        //            if (Roption != "")
+        //            {
+        //                PlanData.Roption = int.Parse(Roption);
+        //            }                    
+
+        //            if (Rsdate != "")
+        //            {
+        //                PlanData.Rsdate = Rsdate;
+        //            }                    
+
+        //            if (Redate != "")
+        //            {
+        //                PlanData.Redate = Redate;
+        //            }                    
+
+        //            if (Weeksch != "")
+        //            {
+        //                PlanData.Weeksch = int.Parse(Weeksch);
+        //            }                    
+
+        //            if (Resetopt != "")
+        //            {
+        //                PlanData.Resetopt = int.Parse(Resetopt);
+        //            }                    
+
+        //            if (Macmap != "")
+        //            {
+        //                PlanData.Macmap = int.Parse(Macmap);
+        //            }                    
+
+        //            if (Ipmap != "")
+        //            {
+        //                PlanData.Ipmap = int.Parse(Ipmap);
+        //            }                   
+                    
+        //        }
+        //    }
+            
+        //}
+        //else
+        //{
+        //    msg = "Select pin plan";
+        //    showmassage(msg);
+        //    return;
+        //}
+
+        //Hashtable Pins = new Hashtable();
+        //TempPinsBusiness Tp = null;
+        //Tp= new TempPinsBusiness();
+        //Pins = Tp.Getpins();
+
+        //TempPins tmp = new TempPins();
+        //tmp.ApprovedBY = "NONE";
+        //tmp.BatchNo = TxtBatchNo.Text.Trim();
+        //tmp.CreatedBy = username;
+        //tmp.DateApproved = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+        //tmp.DateCreated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+        //tmp.DateDistributed = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+        //tmp.DateUsed = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+        //tmp.DistributedBy = "NONE";
+        //tmp.PinPlan = DDListPlans.Text.Trim();
+        
+        //tmp.RecievedDealer = "NONE";
+        //tmp.Status = 0;
+        //tmp.TimeLeft = PlanData.TimeLeft;
+        //tmp.UsedBy = "NONE";
+        //tmp.OrderedBy = "NONE";
+        //tmp.DateOrdered = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+
+        //string LastUsername = "";
+        //ArrayList LastNumb = new ArrayList();
+        //int cnt = 0;
+        //if(Pins.Count > 0)
+        //{
+        //    foreach (DictionaryEntry tokens in Pins)
+        //    {                
+        //        Tp = new TempPinsBusiness();
+
+        //        cnt++;
+        //        tmp.UserName = tokens.Key.ToString();
+        //        tmp.Pins = tokens.Value.ToString();
+        //        LastNumb.Add(tmp.UserName);
+        //        Tp.insertPins(tmp);
+        //        //LastUsername = tmp.UserName;
+                
+        //    }
+        //}
+
+        //deleteTemppins();
+
+        //LastNumb.Sort();
+        //LastUsername= LastNumb[cnt-1].ToString();
+
+        //Tp = new TempPinsBusiness();
+        //Tp.UpdateBatcNoTable(TxtBatchNo.Text.Trim(),LastUsername);
+        //TxtBatchNo.Text = "";
+        //GenerateBatchNo();
+
+        //msg = Pins.Count.ToString() + " " + "Pins submitted successfully";
+        //showmassage(msg);
+
+        ////if (ds00.Tables[0].Rows.Count > 0)
+        ////{
+        ////    for (int jj = 0; jj < ds00.Tables[0].Rows.Count; jj++)
+        ////    {
+        ////        Pin = ds00.Tables[0].Rows[jj][0].ToString().ToUpper();
+        ////        // DDListCategory.Items.Add(Grp);
+        ////        tokk.Add(Pin);
+        ////    }
+        ////}
+
+        ////if (tokk.Count > 0)
+        ////{
+
+        ////    try
+        ////    {
+        ////        int Status = 0;
+        ////        string UsedBy = "NONE";
+        ////        string DateUsed = "";
+        ////        //string DateGenerated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+        ////        string GeneratedBy = username;
+
+        ////        if (GeneratedBy == "")
+        ////        {
+        ////            return;
+        ////        }
+
+        ////        string AssignedBy = "NONE";
+        ////        string DateGenerated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+        ////        string DateGenerated2 = DateTime.Now.ToString("yyyy-MM-dd 23:59:59.999");
+
+        ////        tokk.Sort();
+        ////        int cnt = 0;
+        ////        foreach (string token in tokk)
+        ////        {
+        ////            string Qry = "SELECT * from [Pin] where [Pin]='" + token + "'";
+
+        ////            CSingleAttribute cs = null;// new CSingleAttribute();
+        ////            rq = (CWritetoqueue)Session["user"];
+
+        ////            if (!Exist(Qry))
+        ////            {
+        ////                cs = new CSingleAttribute();
+        ////                cs.ActionType = "INSERT";
+        ////                cs.MethodName = "BtnSubmitToken_Click";
+        ////                cs.SourceClass = "Token";
+        ////                cs.DateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+        ////                cs.SourceApplication = "JobVacancy";
+        ////                cs.ActionBody = "INSERT INTO [Pins]([Pin],[Status],[UsedBy],[DateUsed],[GeneratedBy],[DateGenerated],[ExpirationDate],ExpirationStatus,[AssignedBy]) VALUES ('" + token + "'," + Status + ",'" + UsedBy + "','" + DateUsed + "','" + GeneratedBy + "','" + DateGenerated + "','" + DateUsed + "',0,'NONE')";
+        ////                //cs.ActionBody = "insert into Company ([CompanyID],[BusinessName],[ContactPerson],[Title],[Address],[Phone],[Email],Logopath,status,[CompanyUrl]) values('" + TxtSupplierID.Text.Trim() + "','" + TxtBuzName.Text.Trim() + "','" + TxtContactPerson.Text.Trim() + "','" + TxtTitle.Text.Trim() + "','" + TxtSupplierAddress.Text.Trim() + "','" + TxtPhone.Text + "','" + TxtMail.Text + "','" + PixName + "',1,'" + url + "') ";
+        ////                sendQuery(cs);
+
+        ////                cnt++;
+        ////            }
+        ////        }
+
+        ////        if (Session["user"] != null)
+        ////        {
+        ////            rq = (CWritetoqueue)Session["user"];
+        ////            // AssignBye = rq.Logonpermit.Userid;
+        ////            rq.Logonpermit.Direction = tokk.Count.ToString() + " " + "Pins generated by " + " " + GeneratedBy;// +" " + "by " + " " + username;
+        ////            rq.Writeaudit(rq.Logonpermit);
+        ////        }
+
+        ////        Sql = "SELECT [Pin],[Status],[UsedBy],[DateUsed],[GeneratedBy],[DateGenerated],[ExpirationDate],ExpirationStatus,AssignedBy FROM [Pins]  where DateGenerated between '" + DateGenerated + "' and '" + DateGenerated2 + "' order by Pin";
+        ////        exportheader = "[Pin],[Status],[UsedBy],[DateUsed],[GeneratedBy],[DateGenerated],[ExpirationDate],ExpirationStatus,AssignedBy";
+        ////        Exportfilename = "SubmittedPins";
+        ////        GridCaption = "Submitted Pins";
+        ////        GViewWidth = 500;
+        ////        populateGridAvail();
+        ////        msg = cnt.ToString() + " " + "Pins submitted successfully";
+        ////        showmassage(msg);
+            ////}
+            ////catch (Exception ex)
+            ////{
+            ////    msg = ex.Message;// +"|" + ex.StackTrace;
+            ////    showmassage(msg);
+            ////}
+        //}
+        //else
+        //{
+        //    msg = "No Pin to submit";
+        //    showmassage(msg);
+        //    return;
+        //}
+    }
+
+    private void deleteTemppins()
+    {
+        TempPinsBusiness Tp = new TempPinsBusiness();
+        Tp.DeletePreiviewPins();
+        
+    }
+    private void sendQuery(CSingleAttribute cs)
+    {
+        try
+        {
+            DefaultPropertiesToSend dfp = new DefaultPropertiesToSend();
+            dfp.AttachSenderId = true;
+            dfp.Recoverable = true;
+
+            MessageQueue mq;
+            if (!MessageQueue.Exists(strCrudqueries))
+            {
+                mq = MessageQueue.Create(strCrudqueries);
+                mq.SetPermissions("Everyone", MessageQueueAccessRights.FullControl);
+
+            }
+            else
+            {
+                mq = new MessageQueue(strCrudqueries);
+                mq.Formatter = new XmlMessageFormatter(new Type[] { typeof(CSingleAttribute) });
+                mq.DefaultPropertiesToSend = dfp;
+            }
+
+            mq.DefaultPropertiesToSend.Recoverable = true;
+            mq.DefaultPropertiesToSend.AttachSenderId = true;
+            mq.DefaultPropertiesToSend.Label = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + " " + cs.SourceApplication;
+            mq.Send(cs);
+            mq.Dispose();
+            mq.Close();
+
+        }
+        catch (Exception ex)
+        {
+            msg = ex.Message + "||" + ex.StackTrace.ToString();
+            showmassage(msg);
+            LogError(msg, "Job Vacancy", "");
+        }
+    }
+    private bool Exist(string qry)
+    {
+        bool ret = false;
+        try
+        {
+
+            WebServ = new CybWebServices.Service1();
+            DataSet ds00 = WebServ.RetriveDat(qry);
+
+            if (ds00.Tables[0].Rows.Count > 0)
+            {
+                ret = true;
+            }
+
+        }
+        catch (Exception ex)
+        {
+            msg = ex.Message + "||" + ex.StackTrace.ToString();
+            showmassage(msg);
+            LogError(msg, "Job Vacancy", "");
+        }
+
+        return ret;
+    }
+    private void LogError(string strMsg, string SourceApp, string SourceMethod)
+    {
+        cp = new CPermit();
+        cp.Direction = strMsg;
+        cp.SourceApplication = SourceApp;
+        cp.MethodName = SourceMethod;
+        cp.MsgType = "ERROR";
+        rq = new CWritetoqueue();
+        rq.strPath = auditque;
+        //rq.Logonpermit.MsgType=;
+        rq.Writeaudit(cp);
+    }
+    protected void BtnGenerate_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            ArrayList SortedSrn = new ArrayList();
+
+            PinPreview = true;
+            Hashtable Tok = new Hashtable();
+            EncryptPins = new Hashtable();
+            string user = rq.Logonpermit.Userid;
+
+            if(Key =="")
+            {
+                msg = "Please, provide the encryption key";
+                showmassage(msg);
+                return;
+            }
+
+            int qty1 = 0;
+            int qty2 = 0;
+
+            if (int.TryParse(TxtQtyTokenGenerated.Text, out qty1) && int.TryParse(TxtDigit.Text, out qty2))
+            {
+                if (qty2 > 20)
+                {
+                    msg = "Digit lenght should not be more than 20";
+                    showmassage(msg);
+                    return;
+                }
+                else
+                {
+                    Tok = generateTokens(qty2, qty1);
+                }
+            }
+            else
+            {
+                msg = "Enter values in all the fields";
+                showmassage(msg);
+                return;
+            }
+            //
+            TempPinsBusiness TempB = null;
+            if (Tok.Count > 0)
+            {
+                
+                
+                TempB = new TempPinsBusiness();
+                TempB.DeletePreiviewPins();
+
+                foreach (DictionaryEntry dict in Tok)
+                {
+                    //chqn = int.Parse(chqnumb);
+
+                    TempB = new TempPinsBusiness();                    
+                    string Pin = "";
+                   // byte[] Pin; 
+                    if (ChkBoxPinEncrypt.Checked)
+                    {
+                        //Pin = FormsAuthentication.HashPasswordForStoringInConfigFile(dict.Value.ToString(), "MD5");
+                      byte[] buffer = CyberEncryptor.encypt(dict.Value.ToString(), Key);
+                       //= Encryption(textBox1.Text, txtKey.Text);
+
+                      Pin = Convert.ToBase64String(buffer);
+
+                      //textBox2.Text = b;           
+
+        
+
+                        //Pin = encryptedPin.ToString();
+
+                        string Decp = CyberDecryptor.Decryption(Pin,Key);
+                        //Pin = Encrypt
+                    }
+                    else
+                    {
+                        Pin = dict.Value.ToString();
+                    }
+                    string Srn = dict.Key.ToString();
+                    TempB.InsertPreiviewPins(Pin,user,Srn);
+                    TempB.InsertMasterPins(Pin, user, Srn);
+                    
+                }
+                //
+                //update the last srn
+
+
+                
+                LastSrn = int.Parse(LastSerial);
+                string LastSnumber = String.Format("{0:00000}", LastSrn);
+                TempB = new TempPinsBusiness();
+                TempB.UpdateSerial(LastSnumber);
+
+
+
+
+                //Sql = "Select [Pin] from PinTemp order by Srn";
+                //exportheader = "Pin";
+                //Exportfilename = "PinToken";
+                //GridCaption = "Generated Pins";
+                //GViewWidth = 200;
+                //populateGridAvail();
+
+
+                GViewWidth = 0;
+                //query = "SELECT [GroupName] as [Group Name],[LecturerName] as [Lecturer Name],[FacultyName] as [Faculty],[DepartmentName]as [Department] FROM [LecturerGroup]";
+                //query = "SELECT [AdmissionSession] as Session,[EntryMode],[RegNo],[Surname],[OtherNames],[Sex],[Age],[State],[Country],[AdmissionStatus],[CourseOfStudy],[TransactionDate] FROM [EntryTable] where [AdmissionSession] like '%" + TxtSearch.Text + "%' or EntryMode like '%" + TxtSearch.Text + "%' or RegNo like '%" + TxtSearch.Text + "%' or Surname like '%" + TxtSearch.Text + "%' or OtherNames like '%" + TxtSearch.Text + "%' or Sex like '%" + TxtSearch.Text + "%' or Age like '%" + TxtSearch.Text + "%' or State like '%" + TxtSearch.Text + "%' or Country like '%" + TxtSearch.Text + "%' or AdmissionStatus like '%" + TxtSearch.Text + "%' or CourseOfStudy like '%" + TxtSearch.Text + "%' or [TransactionDate] like '%" + TxtSearch.Text + "%' order by TransactionDate desc";
+                exportheader = TempPinsBusiness.exportheader;// "[GroupName] as [Group Name],[LecturerName] as [Lecturer Name],[FacultyName] as [Faculty],[DepartmentName]as [Department]";
+                Exportfilename = TempPinsBusiness.Exportfilename;// "Lecturer";
+                GridCaption = TempPinsBusiness.GridCaption;// "GroupLecturer";
+                GViewWidth = TempPinsBusiness.GViewWidth;// 900;
+                DataSet query = new DataSet();
+
+                //LecturerGroupBusiness LGB = new LecturerGroupBusiness();
+                //query = LGB.GetStaffSchema();
+                //populategrdv(query);
+
+
+                TempPinsBusiness TempBB = new TempPinsBusiness();
+                query = TempBB.GetPreviewPinSchema();
+                populategrdv(query);
+
+
+
+
+
+                TxtDigit.Text = "";
+                TxtQtyTokenGenerated.Text = "";
+
+                
+            }
+        }
+        catch (Exception ex)
+        {
+            msg = ex.Message;
+            showmassage(msg);
+        }
+    }
+
+    private Hashtable generateTokens(int Digits, int qty)
+    {
+        Hashtable arr = new Hashtable();
+        ArrayList SortedSrn = new ArrayList();
+        int count = 1;
+
+        if (SrialFormat == "")
+        {
+            msg = "Enter serial number digit format";
+            showmassage(msg);
+            return arr;
+        }
+        try
+        {            
+            //represent count with users
+            //1 already added to last user number
+            int cnt =  getlastuserno();
+
+            if (PinFormat == "Numeric")
+            {
+                while (count <= qty)
+                {
+                    System.Guid guid = System.Guid.NewGuid();
+                    string k = "";
+
+                    foreach (char c in guid.ToString().ToLower())
+                    {
+                        if (c >= 0x30 && c <= 0x39)
+                        {
+                            k = k + c.ToString().ToLower();
+                        }
+                        if(k.StartsWith("0"))
+                        {
+                            k = k.Remove(0);
+                        }
+                        if (k.Length == Digits)
+                        {
+
+                            //string UserNUMBER = String.Format("{0:00000}", cnt + count);
+                            string UserNUMBER = String.Format("{" + SrialFormat + "}", cnt + count);
+                            string Serial = "";// PrefixUserNumb + UserNUMBER;
+                            if (PrefixSerial != "")
+                            {
+                                Serial = PrefixSerial + UserNUMBER;
+                            }
+                            else
+                            {
+                                Serial = UserNUMBER;
+                            }
+                            arr.Add(Serial, k);
+                            SortedSrn.Add(cnt+count);
+                            count++;
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+
+                while (count <= qty)
+                {
+                    System.Guid guid = System.Guid.NewGuid();
+                    string k = "";
+
+                    foreach (char c in guid.ToString().ToLower())
+                    {
+                        if (c >= 0x30 && c <= 0x39 || c >= 0x61 && c <= 0x7a)
+                        {
+                            k = k + c.ToString().ToLower();
+
+                        }
+
+                        if (k.StartsWith("0"))
+                        {
+                            k = k.Remove(0);
+                        }
+
+                        
+
+                        if (k.Length == Digits)
+                        {
+                            string UserNUMBER = String.Format("{"+ SrialFormat +"}", cnt + count);
+                            //string UserNUMBER = String.Format("{0:00000}", cnt + count);
+
+                            string Serial = "";// PrefixUserNumb + UserNUMBER;
+                            if (PrefixSerial != "")
+                            {
+                                Serial = PrefixSerial + UserNUMBER;
+                            }
+                            else
+                            {
+                                Serial = UserNUMBER;
+                            }
+                            arr.Add(Serial, k);
+                            SortedSrn.Add(cnt + count);
+                            count++;
+                            break;
+                            ////string UserNUMBER = String.Format("{0:000}", cnt + count);
+                            ////string User = PrefixUserNumb + UserNUMBER;
+                            //arr.Add(count, k);
+                            ////arr.Add(k, count);
+                            //count++;
+                            //break;
+                            
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            msg = ex.Message + "||" + ex.StackTrace.ToString();
+            showmassage(msg);
+        }
+        int SortedSrnCnt =0;
+        SortedSrn.Sort();
+        SortedSrnCnt=SortedSrn.Count;
+        LastSerial = SortedSrn[SortedSrnCnt-1].ToString();
+
+        return arr;
+    }
+
+    private int getlastuserno()
+    {
+        int cnt = 0;
+        TempPinsBusiness tempb = new TempPinsBusiness();
+
+        cnt = tempb.GetLastUsernumber(patternInt);
+
+        return cnt;
+    }
+
+    //private void showmassage(string message)
+    //{
+    //    Label lbl = new Label();
+    //    lbl.Text = "<script language='javascript'>" + Environment.NewLine + "window.alert(" + "'" + message + "'" + ")</script>";
+    //    Page.Controls.Add(lbl);
+    //}
+    protected void BtnSearch2_Click(object sender, EventArgs e)
+    {
+        string qry = "";
+        if (TxtSearch.Text != "")
+        {
+            qry = TxtSearch.Text.Trim().Replace("'", "''");
+            populateGridAvail(qry);
+        }
+
+    }
+
+    private void populateGridAvail(string qry)
+    {
+        try
+        {
+
+
+            //Sql = "SELECT [Token],[Manager],[Mail],[Dept],[Status],[DateUsed],[GINumber],[GeneratedBy],[AssignedBy],[DateGenerated] FROM [Token] where [Token] like '%" + qry + "%' or Manager like '%" + qry + "%' or Mail like '%" + qry + "%' or Dept like '%" + qry + "%' or DateUsed like '%" + qry + "%' or GINumber like '%" + qry + "%' or GeneratedBy like '%" + qry + "%' or AssignedBy like '%" + qry + "%' or DateGenerated like '%" + qry + "%' or Status like '%" + qry + "%'";// 
+
+            //exportheader = "[Token],[Manager],[Mail],[Dept],[Status],[DateUsed],[GINumber],[GeneratedBy],[AssignedBy],[DateGenerated]";//,TOTALPRICE";
+
+            //Exportfilename = "TokenUsedbyManager";
+            //GridCaption = "Number of Manager";
+            //GViewWidth = 1500;
+            //populateGridAvail();
+            //fomatGrid();   
+
+            Sql = "SELECT [Pin],[Status],[UsedBy],[DateUsed],[GeneratedBy],[DateGenerated],[ExpirationDate],ExpirationStatus FROM [Pins]  where [Pin] like '%" + qry + "%' or Status like '%" + qry + "%' or UsedBy like '%" + qry + "%' or DateUsed like '%" + qry + "%' or GeneratedBy like '%" + qry + "%' or DateGenerated like '%" + qry + "%'  order by Pin";
+            exportheader = "[Pin],[Status],[UsedBy],[DateUsed],[GeneratedBy],[DateGenerated],[ExpirationDate],ExpirationStatus";
+            Exportfilename = "SubmittedPins";
+            GridCaption = "Submitted Pins";
+            GViewWidth = 800;
+            populateGridAvail();
+
+        }
+        catch (Exception ex)
+        {
+            msg = ex.Message + "||" + ex.StackTrace.ToString();
+            showmassage(msg);
+        }
+    }
+
+    protected void LinkBtnDisplay_Click(object sender, EventArgs e)
+    {
+
+        LabelAmt2.Text = "";
+        string Sdate = "";
+        string Edate = "";
+        string Status = "";
+        //
+        
+        string ItemStockSummry = "";
+        if (ChkBoxDate.Checked == true)
+        {
+            if (TxtStartdate.Text != "")
+            {
+                Sdate = TxtStartdate.Text.Trim() + " " + "00:00:00.000";
+            }
+            else
+            {
+                msg = "Specify start date";
+                showmassage(msg);
+                return;
+            }
+            //
+            if (TxtEnddate.Text != "")
+            {
+                Edate = TxtEnddate.Text.Trim() + " " + "23:59:59.999";
+            }
+            else
+            {
+                msg = "Specify end date";
+                showmassage(msg);
+                return;
+            }
+        }
+
+        //
+        if (DDListStatus.Text != "")
+        {
+            Status = DDListStatus.Text.Trim();
+        }
+        else
+        {
+            msg = "Select status to use";
+            showmassage(msg);
+            return;
+        }
+        //
+
+        //
+        if (ChkBoxDate.Checked == true)
+        {
+
+            switch (Status)
+            {
+                //case "UsedSummery-Dept":
+                //    QueryTokenByUsedSummeryDept(Status, Sdate, Edate);
+                //    break;
+                //case "UsedSummery-Manager":
+                //    QueryTokenByUsedSummeryManager(Status, Sdate, Edate);
+                //    break;
+                //case "AvailSummary-Manager":
+                //    QueryTokenByAvailSummaryManager(Status, Sdate, Edate);
+                //    break;
+                //case "Avail Tokens":
+                //    QueryTokenByAvailTokens(Status, Sdate, Edate);
+                //    break;
+
+                case "Used Summery":
+                    QueryTokenByUsedSummery(Status, Sdate, Edate);
+                    break;
+                case "Used Pins":
+                    QueryTokenByUsedPins(Status, Sdate, Edate);
+                    break;
+                case "Avail Summary":
+                    QueryTokenByAvailSummary(Status, Sdate, Edate);
+                    break;
+                case "Avail Pins":
+                    QueryTokenByAvailPins(Status, Sdate, Edate);
+                    break;
+            }
+
+
+        }
+        else
+        {
+            switch (Status)
+            {
+
+                case "Used Summery":
+                    QueryTokenByUsedSummery(Status);
+                    break;
+                case "Used Pins":
+                    QueryTokenByUsedPins(Status);
+                    break;
+                case "Avail Summary":
+                    QueryTokenByAvailSummary(Status);
+                    break;
+                case "Avail Pins":
+                    QueryTokenByAvailPins(Status);
+                    break;
+            }
+        }
+    }
+
+    private void QueryTokenByAvailPins(string Status, string Sdate, string Edate)
+    {
+        Sql = "SELECT [Pin],[Status],[UsedBy],[DateUsed],[GeneratedBy],[DateGenerated],[ExpirationDate],ExpirationStatus,[AssignedBy] FROM [Pins]  where Status =0 and [DateUsed] between '" + Sdate + "' and '" + Edate + "'  order by Pin";
+        exportheader = "[Pin],[Status],[UsedBy],[DateUsed],[GeneratedBy],[DateGenerated],[ExpirationDate],ExpirationStatus,[AssignedBy]";
+        Exportfilename = "SubmittedPins";
+        GridCaption = "Submitted Pins";
+        GViewWidth = 800;
+        populateGridAvail();
+    }
+
+    private void QueryTokenByAvailSummary(string Status, string Sdate, string Edate)
+    {
+        Sql = "SELECT count (*) as [Qty Avail]  FROM [Pins] where Status =0 and [DateUsed] between '" + Sdate + "' and '" + Edate + "'";
+        exportheader = "AvailPins";//,TOTALPRICE";
+
+        //exportheader = "[Token],[Status],[GeneratedBy],[DateGenerated]";
+        Exportfilename = "AvailPins";
+        GridCaption = "Avail Pins";
+        GViewWidth = 500;
+        populateGridAvail();
+        fomatGrid();
+    }
+
+    private void QueryTokenByUsedPins(string Status, string Sdate, string Edate)
+    {
+        Sql = "SELECT [Pin],[Status],[UsedBy],[DateUsed],[ExpirationDate],[ExpirationStatus],[AssignedBy] FROM [Pins]  where Status =1 and [DateUsed] between '" + Sdate + "' and '" + Edate + "' order by Pin";
+        exportheader = "[Pin],[Status],[UsedBy],[DateUsed],[ExpirationDate],[ExpirationStatus],[AssignedBy]";
+        Exportfilename = "SubmittedPins";
+        GridCaption = "Submitted Pins";
+        GViewWidth = 800;
+        populateGridAvail();
+    }
+
+    private void QueryTokenByUsedSummery(string Status, string Sdate, string Edate)
+    {
+        //where [DateUsed] between '" + Sdate + "' and '" + Edate + "'  and Status =1  group by Manager
+        Sql = "SELECT [UsedBy],count (UsedBy) as [Qty Used]  FROM [Pins] where Status =1 and [DateUsed] between '" + Sdate + "' and '" + Edate + "' group by UsedBy";
+        exportheader = "[UsedBy],[Qty Used]";
+
+        //exportheader = "[Token],[Status],[GeneratedBy],[DateGenerated]";
+        Exportfilename = "TokenUsedbyClient";
+        GridCaption = "Number of Client";
+        GViewWidth = 500;
+        populateGridAvail();
+        fomatGrid();
+    }
+
+    private void QueryTokenByAvailPins(string Status)
+    {
+        Sql = "SELECT [Pin],[Status],[UsedBy],[DateUsed],[GeneratedBy],[DateGenerated],[ExpirationDate],ExpirationStatus,[AssignedBy] FROM [Pins]  where Status =0  order by Pin";
+        exportheader = "[Pin],[Status],[UsedBy],[DateUsed],[GeneratedBy],[DateGenerated],[ExpirationDate],ExpirationStatus,[AssignedBy]";
+        Exportfilename = "SubmittedPins";
+        GridCaption = "Submitted Pins";
+        GViewWidth = 800;
+        populateGridAvail();
+
+        //Sql = "SELECT count (Token) as [Not Assigned Token]  FROM [Token] where Status =0 and Manager = 'NONE'";
+        //exportheader = "[Qty avail]";
+
+        //Exportfilename = "TokenAvail";
+        //GridCaption = "Tokens";
+        //GViewWidth = 500;
+        //populateGridAvail();
+    }
+
+    private void QueryTokenByAvailSummary(string Status)
+    {
+        //Sql = "SELECT Manager,count (Manager) as [Qty Avail]  FROM [Token] where Status =0 and Manager != 'NONE' group by Manager";
+        //exportheader = "Manager,[Qty Avail]";//,TOTALPRICE";
+
+        ////exportheader = "[Token],[Status],[GeneratedBy],[DateGenerated]";
+        //Exportfilename = "TokenAvail4Manager";
+        //GridCaption = "Number of Manager";
+        //GViewWidth = 500;
+        //populateGridAvail();
+        //fomatGrid();
+
+        Sql = "SELECT count (*) as [Qty Avail]  FROM [Pins] where Status =0";
+        exportheader = "AvailPins";//,TOTALPRICE";
+
+        //exportheader = "[Token],[Status],[GeneratedBy],[DateGenerated]";
+        Exportfilename = "AvailPins";
+        GridCaption = "Avail Pins";
+        GViewWidth = 500;
+        populateGridAvail();
+        fomatGrid();
+    }
+
+    private void QueryTokenByUsedPins(string Status)
+    {
+        //Sql = "SELECT Manager,count (Manager) as [Qty Used]  FROM [Token] where Status =1  group by Manager";
+        //exportheader = "Manager,[Qty Used]";//,TOTALPRICE";
+
+        ////exportheader = "[Token],[Status],[GeneratedBy],[DateGenerated]";
+        //Exportfilename = "TokenUsedbyManager";
+        //GridCaption = "Number of Manager";
+        //GViewWidth = 500;
+        //populateGridAvail();
+        //fomatGrid();
+
+        Sql = "SELECT [Pin],[Status],[UsedBy],[DateUsed],[ExpirationDate],[ExpirationStatus],[AssignedBy] FROM [Pins]  where Status =1  order by Pin";
+        exportheader = "[Pin],[Status],[UsedBy],[DateUsed],[ExpirationDate],[ExpirationStatus],[AssignedBy]";
+        Exportfilename = "SubmittedPins";
+        GridCaption = "Submitted Pins";
+        GViewWidth = 800;
+        populateGridAvail();
+    }
+
+    private void QueryTokenByUsedSummery(string Status)
+    {
+        Sql = "SELECT [UsedBy],count (UsedBy) as [Qty Used]  FROM [Pins] where Status =1  group by UsedBy";
+        exportheader = "[UsedBy],[Qty Used]";//,TOTALPRICE";
+
+        //exportheader = "[Token],[Status],[GeneratedBy],[DateGenerated]";
+        Exportfilename = "TokenUsedbyClient";
+        GridCaption = "Number of Client";
+        GViewWidth = 500;
+        populateGridAvail();
+        fomatGrid();
+    }
+
+    private void QueryTokenByAvailTokens(string Status, string Sdate, string Edate)
+    {
+        Sql = "SELECT count (Token) as [Not Assigned Token]  FROM [Token] where Status =0 and Manager = 'NONE'";
+        exportheader = "[Qty avail]";//,TOTALPRICE";
+
+        //exportheader = "[Token],[Status],[GeneratedBy],[DateGenerated]";
+        Exportfilename = "TokenAvail";
+        GridCaption = "Tokens";
+        GViewWidth = 500;
+        populateGridAvail();
+    }
+
+    private void QueryTokenByAvailSummaryManager(string Status, string Sdate, string Edate)
+    {
+
+
+        Sql = "SELECT Manager,count (Manager) as [Qty Avail]  FROM [Token] where Status =0 and Manager != 'NONE' group by Manager";
+        exportheader = "Manager,[Qty Avail]";//,TOTALPRICE";
+
+        //exportheader = "[Token],[Status],[GeneratedBy],[DateGenerated]";
+        Exportfilename = "TokenAvail4Manager";
+        GridCaption = "Number of Manager";
+        GViewWidth = 500;
+        populateGridAvail();
+        fomatGrid();
+    }
+
+    private void QueryTokenByUsedSummeryManager(string Status, string Sdate, string Edate)
+    {
+        Sql = "SELECT Manager,count (Manager) as [Qty Used]  FROM [Token] where [DateUsed] between '" + Sdate + "' and '" + Edate + "'  and Status =1  group by Manager";
+        exportheader = "Manager,[Qty Used]";//,TOTALPRICE";
+
+        //exportheader = "[Token],[Status],[GeneratedBy],[DateGenerated]";
+        Exportfilename = "TokenUsedbyManager";
+        GridCaption = "Number of Manager";
+        GViewWidth = 500;
+        populateGridAvail();
+        fomatGrid();
+
+        //
+        //query = "SELECT SELECT [Token],[Manager],[Mail],[Dept],[Status],[DateUsed],[GINumber],[GeneratedBy],[AssignedBy],[DateGenerated] FROM [Token] where  [TransactDate] between '" + Sdate + "' and '" + Edate + "' order by GoodsReceiveNo desc";
+        //exportheader = "[Items],[ProductNumber],[UnitPrice],[GoodsReceiveNo] as GrNumber,[PoNumber],[Supplier],[TransactDate],[IssuedStatus] as Status";
+        //Exportfilename = "QryAllITEMSDate";
+        //GroupHeader = "All ITEMS";
+        //populategrdv(query);
+    }
+
+    private void QueryTokenByUsedSummeryDept(string Status, string Sdate, string Edate)
+    {
+
+        Sql = "SELECT [Dept],count (Dept) as [Qty Used]  FROM [Token] where [DateUsed] between '" + Sdate + "' and '" + Edate + "'  and Status =1  group by Dept";
+        exportheader = "[Dept],[Qty Used]";//,TOTALPRICE";
+
+        //exportheader = "[Token],[Status],[GeneratedBy],[DateGenerated]";
+        Exportfilename = "TokenUsedbyDept";
+        GridCaption = "Number of Dept";
+        GViewWidth = 500;
+        populateGridAvail();
+        fomatGrid();
+        //
+        //query = "SELECT SELECT [Token],[Manager],[Mail],[Dept],[Status],[DateUsed],[GINumber],[GeneratedBy],[AssignedBy],[DateGenerated] FROM [Token] where  [TransactDate] between '" + Sdate + "' and '" + Edate + "' order by GoodsReceiveNo desc";
+        //exportheader = "[Items],[ProductNumber],[UnitPrice],[GoodsReceiveNo] as GrNumber,[PoNumber],[Supplier],[TransactDate],[IssuedStatus] as Status";
+        //Exportfilename = "QryAllITEMSDate";
+        //GroupHeader = "All ITEMS";
+        //populategrdv(query);
+    }
+
+    private void fomatGrid()
+    {
+        try
+        {
+            String datef = "";
+            DateTime datty;
+            int dd = 0;
+
+            if (GridView1.Rows.Count > 0)
+            {
+                int j = GridView1.HeaderRow.Cells.Count;//.Columns.Count;
+                int Amt = 0;
+                int avail = 0;
+                int collectiondate = 0;
+                int Transdate = 0;
+                int Duedate = 0;
+
+                for (int m = 0; m < j; m++)
+                {
+                    if (GridView1.HeaderRow.Cells[m].Text == "Qty Used")
+                    {
+                        Amt = m;
+                    }
+                    if (GridView1.HeaderRow.Cells[m].Text == "Qty Avail")
+                    {
+                        avail = m;
+                    }
+                    //if (GridView1.HeaderRow.Cells[m].Text.ToUpper() == "TRANSDATE")
+                    //{
+                    //    Transdate = m;
+                    //}
+                    //if (GridView1.HeaderRow.Cells[m].Text.ToUpper() == "DUEDATE")
+                    //{
+                    //    Duedate = m;
+                    //}
+                }
+
+                int Total = 0;
+                for (int i = 0; i < GridView1.Rows.Count; i++)
+                {
+                    if (Amt != 0)
+                    {
+                        // GridView1.Rows[i].Cells[7].BackColor = System.Drawing.Color.Yellow;
+                        dd = int.Parse(GridView1.Rows[i].Cells[Amt].Text);
+                        //GridView1.Rows[i].Cells[Amt].Text = String.Format("{0:N}", dd);
+                        Total = Total + dd;
+                    }
+
+                    if (avail != 0)
+                    {
+
+                        dd = int.Parse(GridView1.Rows[i].Cells[avail].Text);
+                        //GridView1.Rows[i].Cells[Amt].Text = String.Format("{0:N}", dd);
+                        Total = Total + dd;
+                    }
+                    //if (collectiondate != 0)
+                    //{
+                    //    datty = Convert.ToDateTime(GridView1.Rows[i].Cells[collectiondate].Text);
+                    //    datef = datty.ToString("yyyy-MM-dd");//(GridView1.Rows[i].Cells[6].Text).ToString("yyyy-MM-dd");
+                    //    GridView1.Rows[i].Cells[collectiondate].Text = datef;
+                    //}
+                    //if (Transdate != 0)
+                    //{
+                    //    datty = Convert.ToDateTime(GridView1.Rows[i].Cells[Transdate].Text);
+                    //    datef = datty.ToString("yyyy-MM-dd HH:mm:ss");//(GridView1.Rows[i].Cells[6].Text).ToString("yyyy-MM-dd");
+                    //    GridView1.Rows[i].Cells[Transdate].Text = datef;
+                    //}
+                    ////
+                    //if (Duedate != 0)
+                    //{
+                    //    datty = Convert.ToDateTime(GridView1.Rows[i].Cells[Duedate].Text);
+                    //    datef = datty.ToString("yyyy-MM-dd");//(GridView1.Rows[i].Cells[6].Text).ToString("yyyy-MM-dd");
+                    //    GridView1.Rows[i].Cells[Duedate].Text = datef;
+                    //}
+
+                }
+
+                //string amount = "";
+                if (Total > 0)
+                {
+                    LabelAmt1.Visible = true;
+                    LabelAmt2.Text = Total.ToString();// String.Format("{0:N}", Total);//Total.ToString();
+                    LabelAmt2.Visible = true;
+                }
+            }
+
+        }
+        catch (Exception ex)
+        {
+            msg = ex.Message + "||" + ex.StackTrace.ToString();
+            showmassage(msg);
+        }
+    }
+    //
+
+
+    protected void BtnSelectAll_Click(object sender, EventArgs e)
+    {
+        //int k = ChckBxManager.Items.Count;
+        //for (int j = 0; j < k; j++ )
+        //{
+        //    ChckBxManager.Items[j].Selected=true;
+        //}
+    }
+    protected void BtnDeselect_Click(object sender, EventArgs e)
+    {
+        //int k = ChckBxManager.Items.Count;
+        //for (int j = 0; j < k; j++)
+        //{
+        //    ChckBxManager.Items[j].Selected = false;
+        //}
+    }
+    protected void LinkBtnRefresh_Click(object sender, EventArgs e)
+    {
+        GViewWidth = 0;       
+        exportheader = TempPinsBusiness.exportheader;
+        Exportfilename = TempPinsBusiness.Exportfilename;
+        GridCaption = TempPinsBusiness.GridCaption;
+        GViewWidth = TempPinsBusiness.GViewWidth;
+        DataSet query = new DataSet();
+
+        TempPinsBusiness TempBB = new TempPinsBusiness();
+        query = TempBB.GetPreviewPinSchema();
+        populategrdv(query);
+    }
+    //protected void LinkBtnExp2_Click(object sender, EventArgs e)
+    //{
+    //    formatGridviewExp();
+    //}
+}

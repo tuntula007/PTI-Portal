@@ -1,0 +1,340 @@
+﻿using System;
+using System.Collections;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Web;
+using System.Web.Security;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
+using System.Web.UI.WebControls.WebParts;
+using Cyberspace.ServiceBrocker;
+using System.IO;
+using System.Messaging;
+using System.Reflection;
+using System.Text;
+using System.Drawing;
+using System.Text.RegularExpressions;
+
+
+public partial class BooKReservation : System.Web.UI.Page
+{
+    //private static string str = ConfigurationManager.AppSettings["conn"];
+    string strConnection = System.Configuration.ConfigurationManager.AppSettings["conn"];
+    //LecturerFolder
+    private static string LecturerPixFolder = ConfigurationManager.AppSettings["LibraryBookFolder"];
+    private string strCrudqueries = ".\\Private$\\" + System.Configuration.ConfigurationManager.AppSettings["Crudqueries"].Trim();
+    private string Log4netName = System.Configuration.ConfigurationManager.AppSettings["Log4net"].Trim();
+    private static string msg = "";   
+
+
+
+    //private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+
+    private static string exportheader = "";
+    private static string Exportfilename = "";
+    private static string query = "";
+    private static string GridCaption = "";
+    private static string PixName = "NONE";
+    private static string EditedPixName = "";
+
+    private static int GViewWidth = 0;
+
+    private static string PresentDept = "";
+    private static ArrayList AllFaculty = null;
+    private static ArrayList AllDept = null;
+
+    private static Hashtable FacultyID = null;
+    private static Hashtable DeptID = null;
+
+    private string auditque = ".\\Private$\\" + System.Configuration.ConfigurationManager.AppSettings["Auditlog"];
+    private static CPermit cp = null;
+    private static CWritetoqueue rq = null;
+    private static string Group = "";
+    private static string ID = "";
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        //private static string Group = "";
+        //private static string ID = "";
+        if (Cache[HttpContext.Current.User.Identity.Name] != null)
+        {
+            ID = HttpContext.Current.User.Identity.Name;
+            Group = (string)Cache[HttpContext.Current.User.Identity.Name];
+            if (!Group.ToLower().Contains("admin") == true)
+            {
+
+                msg = "You have no right to access this page";
+                showmassage(msg);
+                Response.Redirect("Home.aspx");
+
+                return;
+            }
+            else
+            {
+
+            }
+        }
+
+        if (Page.IsPostBack == false)
+        {
+            LoadApprovedReservedBooks();
+           // LoadPinOrderHistory();
+
+        }
+
+        GridView1.Width = 800;
+    }
+
+    private void LoadApprovedReservedBooks()
+    {
+        try
+        {
+            SqlConnection cnn = new SqlConnection(strConnection);
+            cnn.Open();
+            DataSet ds = new DataSet();
+            
+            //string qry = "Select TU.BorrowerID,TU.AccNo,TU.ISBN,BK.[Title],TU.DateReserved,TU.ReservationStatus  FROM Reservation TU,[BookDetails] BK  where TU.ReservationStatus = 1 and TU.AccNo= BK.AccNo";
+
+            string qry = "[BatchNumber] as [Batch Number],BatchQty as [Batch Qty],[DateGenerated] as [Date Generated],[DispatchedStatus] as [Status] from [MasterPins  where [GeneratedBy] = '" + ID + "' and [DispatchedStatus]= 0 order DateGenerated desc";
+            
+            SqlDataAdapter da = new SqlDataAdapter(qry, cnn);
+            
+            da.Fill(ds);
+            GridView1.DataSource = ds;
+            GridView1.DataBind();
+            Session["ds2"] = ds;
+            da.Dispose();
+            ds.Dispose();
+            cnn.Dispose();
+            cnn.Close();
+        }
+        catch (Exception ex)
+        {
+            string exx = ex.Message;
+        }
+    }
+
+    
+    protected void GridView1_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+        int selectedIndex = GridView1.SelectedIndex;
+
+        try
+        {                      
+
+            if (updateBkdatails(GridView1.Rows[selectedIndex].Cells[2].Text))
+            {
+                SqlConnection cnn = new SqlConnection(strConnection);
+                cnn.Open();
+
+                SqlCommand cmd = null;
+                //SELECT [ISBN],[DateAquired],[BarCode],[BookCode],[ShelfCode],[Availability],[SetupBy],[Datesetup]  FROM [BookDetails]
+                cmd = new SqlCommand("Update Reservation set [ReservationStatus]  = 0  where AccNo = '" + GridView1.Rows[selectedIndex].Cells[2].Text + "' and BorrowerID = '" + GridView1.Rows[selectedIndex].Cells[1].Text + "'", cnn);
+                cmd.ExecuteNonQuery();
+                cmd.Dispose();
+                cnn.Dispose();
+                cnn.Close();
+
+                msg = "Book free to be borrowed out";
+                showmassage(msg);
+            }
+            else
+            {
+                msg = "This book is not available to be borrowed";
+                showmassage(msg);
+            }
+            
+            LoadApprovedReservedBooks();
+            
+
+            
+        }
+        catch (Exception ex)
+        {
+            string exx = ex.Message;
+
+        }
+
+
+
+    }
+
+    private bool updateBkdatails(string Accno)
+    {
+        bool rtn = false;
+
+        try
+        {
+            SqlConnection cnn = new SqlConnection(strConnection);
+            cnn.Open();
+
+            SqlCommand cmd = null;
+            SqlDataReader dr = null;
+            string qry = "SELECT *  FROM [BookDetails] where AccNo ='" + Accno + "' and Availability = 1 ";
+            cmd = new SqlCommand(qry, cnn);
+            
+            //cmd = new SqlCommand("SELECT [ISBN],[DateAquired],[BarCode],[BookCode],[ShelfCode],[Availability],[SetupBy],[Datesetup]  FROM [BookDetails] where ISBN ='" + isbn + "' and Availability = 1 ", cnn);
+            
+            dr = cmd.ExecuteReader();
+            if (dr.Read())
+            {
+                //string bcode = dr.GetString(3);
+
+                //cmd.Dispose();
+                //dr.Dispose();
+                
+                //cmd = new SqlCommand("Update BookDetails set [Availability]  = 'Not Available'  where BookCode = '" + bcode + "'", cnn);
+                //cmd.ExecuteNonQuery();
+                rtn = true;
+
+            }
+
+            cmd.Dispose();
+            dr.Dispose();
+            cnn.Dispose();
+            cnn.Close();
+        }
+        catch (Exception ex)
+        {
+
+            string exx = ex.Message;
+        }
+
+        return rtn;
+    }
+    private void showmassage(string message)
+    {
+        message = message.Replace("'", " ").Replace("\r\n", "");
+        Label lbl = new Label();
+        lbl.Text = "<script language='javascript'>" + Environment.NewLine + "window.alert(" + "'" + message + "'" + ")</script>";
+        Page.Controls.Add(lbl);
+    }
+    //GridView1_OnPageIndexChanging
+    protected void GridView1_OnPageIndexChanging(object sender, GridViewPageEventArgs e)
+    {
+        try
+        {
+            DataSet ds3 = null;
+            if (Session["ds2"] != null)
+            {
+                ds3 = (DataSet)Session["ds2"];
+                GridView1.DataSource = ds3;
+                GridView1.Width = GViewWidth;
+                GridView1.PageIndex = e.NewPageIndex;
+                //GrdVPerntwk.PageIndex = e.NewPageIndex;
+                GridView1.DataBind();
+                GridView1.Caption = GridCaption + ":" + " " + "Total = " + " " + ds3.Tables[0].Rows.Count.ToString();
+                GridView1.ToolTip = ds3.Tables[0].Rows.Count.ToString();
+                
+
+            }
+        }
+        catch (Exception ex)
+        {
+            msg = ex.Message + "||" + ex.StackTrace.ToString();
+            showmassage(msg);
+            LogError(msg, "Library Automation", "");
+        }
+    }
+    private void LogError(string strMsg, string SourceApp, string SourceMethod)
+    {
+        cp = new CPermit();
+        cp.Direction = strMsg;
+        cp.SourceApplication = SourceApp;
+        cp.MethodName = SourceMethod;
+        cp.MsgType = "ERROR";
+        rq = new CWritetoqueue();
+        rq.strPath = auditque;
+        //rq.Logonpermit.MsgType=;
+        rq.Writeaudit(cp);
+    }
+    protected void GridView2_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        //int selectedIndex = GridView2.SelectedIndex;
+
+
+        //try
+        //{
+
+        //    SqlConnection cnn = new SqlConnection(strConnection);
+        //    cnn.Open();
+        //    DataSet ds = new DataSet();
+        //    SqlDataAdapter da = new SqlDataAdapter("Select T.DateDistributed, T.pinplan,T.UserName,T.Pins ,T.TimeLeft, T.BatchNo,T.Amount from  TempPins T, fsplans P  where T.Status = 3 and T.BatchNo = '" + GridView2.Rows[selectedIndex].Cells[2].Text + "' and T.pinplan=P.pname", cnn);
+        //    da.Fill(ds);
+
+        //    ExportData("SRN,DATEDISPATCHED,PLAN,USERID,PIN,TIMELEFT,BATCHNO,AMOUNT(Naira)", ds, GridView2.Rows[selectedIndex].Cells[2].Text);
+
+        //    da.Dispose();
+        //    ds.Dispose();
+        //    cnn.Dispose();
+        //    cnn.Close();
+        //}
+        //catch (Exception ex)
+        //{
+        //    string exx = ex.Message;
+
+        //}
+
+    }
+
+    private void ExportData(string hd, DataSet ds, string batchno)
+    {
+        Response.Clear();
+        Response.ContentType = "text/plain";
+        Response.Charset = "";
+        StringBuilder str = new StringBuilder();
+        str.Append(hd);
+        str.AppendLine();
+
+        for (int i = 0; i <= ds.Tables[0].Rows.Count - 1; i++)
+        {
+            str.Append(i + 1);
+
+            for (int j = 0; j <= ds.Tables[0].Columns.Count - 1; j++)
+            {
+
+                if (j == 0)
+                {
+                    DateTime dt;
+                    DateTime.TryParse(ds.Tables[0].Rows[i][j].ToString(), out dt);
+
+                    str.Append("," + dt.ToString("yyyy-MM-dd HH:mm:ss"));
+
+                }
+                else
+                {
+
+                    str.Append("," + ds.Tables[0].Rows[i][j].ToString().Replace(",", ";"));
+                }
+
+
+
+
+            }
+
+
+            str.AppendLine();
+        }
+
+        Response.Clear();
+        Response.AddHeader("content-disposition", "attachment;filename=Pins-" + batchno + DateTime.Now.ToString("yyyy-MM-dd HHmmss") + ".csv");
+        Response.Charset = "";
+        Response.Cache.SetCacheability(HttpCacheability.NoCache);
+        Response.ContentType = "application/vnd.csv";
+        System.IO.StringWriter stringWrite = new System.IO.StringWriter();
+        System.Web.UI.HtmlTextWriter htmlWrite = new HtmlTextWriter(stringWrite);
+        Response.Write(str.ToString());
+        try
+        {
+            Response.End();
+        }
+        catch (Exception ex)
+        {
+
+            string exx = ex.Message;
+        }
+    }
+}

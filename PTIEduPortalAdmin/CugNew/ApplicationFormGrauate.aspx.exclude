@@ -1,0 +1,1174 @@
+﻿<%@ Page Language="C#" MasterPageFile="~/MasterPageApplicant.master" AutoEventWireup="true"
+    CodeFile="ApplicationFormGrauate.aspx.cs" MaintainScrollPositionOnPostback="true"
+    Inherits="ApplicationFormGrauate" Title="Untitled Page" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
+    <style type="text/css">
+        .text-normal
+        {
+            border-right: #666666 1px solid;
+            border-top: #666666 1px solid;
+            font-size: 12px;
+            word-spacing: normal;
+            vertical-align: middle;
+            border-left: #666666 1px solid;
+            color: #333333;
+            border-bottom: #666666 1px solid;
+            font-style: normal;
+            font-family: Verdana, Arial;
+            letter-spacing: normal;
+            height: 18px;
+            background-color: #ffffff;
+            text-align: left;
+        }
+        .tablesubject
+        {
+            width: 95%;
+            border-collapse: collapse;
+            border-style: solid;
+            border-width: 1px;
+        }
+        .style2
+        {
+            width: 95%;
+            font-family: Arial;
+        }
+        .style34
+        {
+            width: 174px;
+            height: 22px;
+            font-weight: normal;
+        }
+        .style35
+        {
+            height: 22px;
+        }
+        .style43
+        {
+            font-weight: normal;
+            width: 174px;
+        }
+        .style44
+        {
+            text-decoration: underline;
+        }
+    </style>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    <table border="0" style="margin: 0px 0px 0px 0px; width: 100%" cellpadding="0" cellspacing="4">
+        <tr align="left">
+            <td>
+                <table style="width: 100%">
+                    <tr>
+                        <td>
+                            <table cellpadding="0" cellspacing="0" style="width: 100%">
+                                <tr>
+                                    <td style="width: 100%">
+                                        <hr style="background-color: #c40000; height: 1px; border-top-color: Red; border-style: solid" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 100%">
+                                        <table style="position: relative; z-index: auto; float: left; overflow: auto; table-layout: auto">
+                                            <tr>
+                                                <td style="color: Blue; font-size: larger; font-weight: bold">
+                                                    Graduate Application Form
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 100%">
+                                        <hr style="background-color: #c40000; height: 1px; border-top-color: Red; border-style: solid" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 100%">
+                                        <table cellpadding="4" cellspacing="3" style="position: relative; z-index: auto;
+                                            float: left; overflow: auto; table-layout: auto">
+                                            <tr>
+                                                <td nowrap="nowrap">
+                                                    <asp:LinkButton ID="LinkBtnAddNew" runat="server" Font-Underline="True" OnClick="LinkBtnAddNew_Click"
+                                                        Style="text-align: left">BIODATA</asp:LinkButton>
+                                                </td>
+                                                <td nowrap="nowrap" style="border-left-style: solid; border-left-color: Red; border-width: thin">
+                                                    <asp:LinkButton ID="LinkBtnEdit" runat="server" Font-Underline="True" OnClick="LinkBtnEdit_Click"
+                                                        Style="text-align: left">REFERENCES</asp:LinkButton>
+                                                </td>
+                                                <td nowrap="nowrap" style="border-left-style: solid; border-left-color: Red; border-width: thin">
+                                                    <asp:LinkButton ID="LinkBtnUploadLectr" runat="server" Font-Underline="True" OnClick="LinkBtnUploadLectr_Click"
+                                                        Style="text-align: left">QUALIFICATIONS</asp:LinkButton>
+                                                </td>
+                                                <td nowrap="nowrap" style="border-left-style: solid; border-left-color: Red; border-width: thin">
+                                                    <asp:LinkButton ID="LinkBtnSearch" runat="server" Font-Underline="True" OnClick="LinkBtnSearch_Click"
+                                                        Style="text-align: left">EMPLOYMENT HISTORY</asp:LinkButton>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 100%">
+                                        <asp:MultiView ID="MultiView1" runat="server">
+                                            <table>
+                                                <tr>
+                                                    <td style="width: 100%">
+                                                        <asp:View ID="View01" runat="server">
+                                                            <asp:Panel ID="PanelBiodata" runat="server" GroupingText="" HorizontalAlign="Left"
+                                                                Width="100%" Wrap="true">
+                                                                <table>
+                                                                    <tr>
+                                                                        <td align="left">
+                                                                            <table>
+                                                                                <tr>
+                                                                                    <td class="style43">
+                                                                                        &nbsp;
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        &nbsp;
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style43">
+                                                                                        Programme Option
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <asp:DropDownList ID="CmbProgramme" runat="server">
+                                                                                            <asp:ListItem></asp:ListItem>
+                                                                                            <asp:ListItem>Religious Education and Pastoral Ministry(REPM)</asp:ListItem>
+                                                                                            <asp:ListItem>Diploma in Education(PGDE)</asp:ListItem>
+                                                                                        </asp:DropDownList>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td colspan="2">
+                                                                                        NOTE* Applicant's Names must correspond exactly with those for all examinations
+                                                                                        taken
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style43">
+                                                                                        Title:
+                                                                                    </td>
+                                                                                    <td colspan="2">
+                                                                                        <asp:DropDownList ID="DDListTitle" runat="server">
+                                                                                            <asp:ListItem></asp:ListItem>
+                                                                                            <asp:ListItem>Prof.</asp:ListItem>
+                                                                                            <asp:ListItem>Dr.</asp:ListItem>
+                                                                                            <asp:ListItem>Rev.</asp:ListItem>
+                                                                                            <asp:ListItem>Pastor</asp:ListItem>
+                                                                                            <asp:ListItem>Evangelist</asp:ListItem>
+                                                                                            <asp:ListItem>Mr.</asp:ListItem>
+                                                                                            <asp:ListItem>Mrs.</asp:ListItem>
+                                                                                            <asp:ListItem>Ms.</asp:ListItem>
+                                                                                        </asp:DropDownList>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style43">
+                                                                                        Surname:
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <asp:TextBox ID="txtSurname" runat="server" CssClass="text-normal" Width="289px"></asp:TextBox>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style43">
+                                                                                        First Name:
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <asp:TextBox ID="TxtFname" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style43">
+                                                                                        Middle Name(s):
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <asp:TextBox ID="txtOthernames" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style43">
+                                                                                        Date of Birth (dd/mm/yyyy)
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <asp:TextBox ID="txtDateOfBirth" runat="server" CssClass="text-normal" Width="138px"></asp:TextBox>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style43">
+                                                                                        Gender
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <asp:DropDownList ID="cmbSex" runat="server">
+                                                                                            <asp:ListItem></asp:ListItem>
+                                                                                            <asp:ListItem>Male</asp:ListItem>
+                                                                                            <asp:ListItem>Female</asp:ListItem>
+                                                                                        </asp:DropDownList>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style43">
+                                                                                        Place of Birth
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <asp:TextBox ID="txtPlaceBirth" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style43">
+                                                                                        Nationality
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <asp:TextBox ID="txtNationality" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style43">
+                                                                                        Home Town
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <asp:TextBox ID="txtHomeTown" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style43" nowrap="nowrap">
+                                                                                        Region/State of Home Town
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <asp:TextBox ID="txtRegion" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style43">
+                                                                                        Religion
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <asp:TextBox ID="txtReligion" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style43">
+                                                                                        Denomination
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <asp:TextBox ID="txtReligionDenom" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style43" nowrap="nowrap">
+                                                                                        Diocese (If Catholic)
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <asp:TextBox ID="txtDiocese" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style43">
+                                                                                        Place of Residence
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <asp:TextBox ID="txtPlaceResidence" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style43">
+                                                                                        Marital Status
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <asp:DropDownList ID="cmbMaritalStatus" runat="server">
+                                                                                            <asp:ListItem></asp:ListItem>
+                                                                                            <asp:ListItem>Single</asp:ListItem>
+                                                                                            <asp:ListItem>Married</asp:ListItem>
+                                                                                            <asp:ListItem>Divorced</asp:ListItem>
+                                                                                            <asp:ListItem>Separated</asp:ListItem>
+                                                                                            <asp:ListItem>Widow</asp:ListItem>
+                                                                                        </asp:DropDownList>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style43">
+                                                                                        No of Children
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <asp:TextBox ID="txtNoOfChildren" runat="server" CssClass="text-normal" Width="138px"></asp:TextBox>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style43">
+                                                                                        Postal Address
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <asp:TextBox ID="txtPostalAddress" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style43">
+                                                                                        Phone Number
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <asp:TextBox ID="txtPhoneNumber" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style34">
+                                                                                        Email
+                                                                                    </td>
+                                                                                    <td class="style35">
+                                                                                        <asp:TextBox ID="txtEmail" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style34" nowrap="nowrap">
+                                                                                        Permanent Home Address
+                                                                                    </td>
+                                                                                    <td class="style35">
+                                                                                        <asp:TextBox ID="txtHomeAddress" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style34" nowrap="nowrap">
+                                                                                        Home Phone Number
+                                                                                    </td>
+                                                                                    <td class="style35">
+                                                                                        <asp:TextBox ID="TxtHomePhone" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style34" nowrap="nowrap">
+                                                                                        Name and Address of Guardian
+                                                                                    </td>
+                                                                                    <td class="style35">
+                                                                                        <asp:TextBox ID="txtGuardianName" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style34" nowrap="nowrap">
+                                                                                        Guardian&#39;s Occupation
+                                                                                    </td>
+                                                                                    <td class="style35">
+                                                                                        <asp:TextBox ID="txtGuardianOccup" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style43" nowrap="nowrap">
+                                                                                        Guardian&#39;s Phone No
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <asp:TextBox ID="txtGuardianPhone" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style43">
+                                                                                        Physically Disabled?
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <asp:DropDownList ID="cmbPhysicalD" runat="server">
+                                                                                            <asp:ListItem></asp:ListItem>
+                                                                                            <asp:ListItem>Yes</asp:ListItem>
+                                                                                            <asp:ListItem>No</asp:ListItem>
+                                                                                        </asp:DropDownList>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style43">
+                                                                                        If Yes, specify
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <asp:TextBox ID="txtPhysicalDD" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td colspan="2" nowrap="nowrap">
+                                                                                        <br />
+                                                                                        DECLARATION
+                                                                                        <br />
+                                                                                        I declared that the information I have provided is complete and accurate…
+                                                                                        <br />
+                                                                                        <br />
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        &nbsp;
+                                                                                    </td>
+                                                                                    <td colspan="2">
+                                                                                        <asp:CheckBox ID="chkDisclaimer" runat="server" Text="I Accept" ForeColor="#FF3300" />
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="style43">
+                                                                                        &nbsp;
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <asp:Button ID="BtnBiodataSave" runat="server" Text="Save" Width="50px" OnClick="BtnBiodataSave_Click" />
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </asp:Panel>
+                                                        </asp:View>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <asp:View ID="View2" runat="server">
+                                                        <asp:Panel ID="PanelRef" runat="server" GroupingText="" HorizontalAlign="Left"
+                                                                Width="100%" Wrap="true">
+                                                            <table>
+                                                                <tr>
+                                                                    <td align="left">
+                                                                        <table>
+                                                                            <tr>
+                                                                                <td colspan="2" nowrap="nowrap">
+                                                                                    <br />
+                                                                                    NOTE* Provide two references. Idealy, at least one of them
+                                                                                    <br />
+                                                                                    should be in a position to assess your performance at your job.
+                                                                                    <br />
+                                                                                    <br />
+                                                                                    <i>Please note that it is your responsibility to arrange for references to be provided.
+                                                                                        <br />
+                                                                                        Ask your references to complete the enclosed </i><i><b>Graduate Confidential Reference
+                                                                                            Forms</b></i><i> and return them directly to:
+                                                                                                <br />
+                                                                                            </i><i>Registrar (Graduate Academic) CUCG P.O.Box 363, Sunyani, BA Region, Ghana, West
+                                                                                                Africa.</i>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap" class="style44">
+                                                                                    <i><b>Reference 1. </b></i>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Name:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtRefName1" runat="server" CssClass="text-normal" Width="289px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Organisation:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtRefOrg1" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Position/Title:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtRefTitle1" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Phone Number
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtRefPhone1" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Email
+                                                                                </td>
+                                                                                <td class="style35">
+                                                                                    <asp:TextBox ID="TxtRefMail1" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap" style="font-weight: 700; font-style: italic; text-decoration: underline">
+                                                                                    Reference 2.
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Name:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtRefName2" runat="server" CssClass="text-normal" Width="289px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Organisation:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtRefOrg2" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Position/Title:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtRefTitle2" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Phone Number
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtRefPhone2" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Email
+                                                                                </td>
+                                                                                <td class="style35">
+                                                                                    <asp:TextBox ID="TxtRefMail2" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                             
+                                                                            <tr>
+                                                                                <td class="style43">
+                                                                                    &nbsp;
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:Button ID="BtnRef" runat="server" Text="Save" Width="50px" OnClick="BtnRefSave_Click" />
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            </asp:Panel>
+                                                        </asp:View>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <asp:View ID="View3" runat="server">
+                                                        <asp:Panel ID="PanelQualification" runat="server" GroupingText="" HorizontalAlign="Left" Width="100%" Wrap="true">
+                                                            <table>
+                                                                <tr>
+                                                                    <td align="left">
+                                                                        <table>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap" style="font-weight: 700; font-style: italic; text-decoration: underline">
+                                                                                    Undergraduate Qualification
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Name of Institution:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtUnderGraduateQInstitution" runat="server" CssClass="text-normal"
+                                                                                        Width="289px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Country of Institution:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtUnderGraduateQCountry" runat="server" CssClass="text-normal"
+                                                                                        Width="376px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Duration of Studies:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <table>
+                                                                                        <tr>
+                                                                                            <td>
+                                                                                                Start Month
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <asp:DropDownList ID="DDListUnderGraduateQStartMonth" runat="server">
+                                                                                                    <asp:ListItem>January</asp:ListItem>
+                                                                                                    <asp:ListItem>February</asp:ListItem>
+                                                                                                    <asp:ListItem>March</asp:ListItem>
+                                                                                                    <asp:ListItem>April</asp:ListItem>
+                                                                                                    <asp:ListItem>May</asp:ListItem>
+                                                                                                    <asp:ListItem>June</asp:ListItem>
+                                                                                                    <asp:ListItem>July</asp:ListItem>
+                                                                                                    <asp:ListItem>August</asp:ListItem>
+                                                                                                    <asp:ListItem>September</asp:ListItem>
+                                                                                                    <asp:ListItem>October</asp:ListItem>
+                                                                                                    <asp:ListItem>November</asp:ListItem>
+                                                                                                    <asp:ListItem>December</asp:ListItem>
+                                                                                                </asp:DropDownList>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                Start Year
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <asp:TextBox ID="TxtUnderGraduateQStartYr" runat="server" CssClass="text-normal"
+                                                                                                    Width="57px"></asp:TextBox>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td>
+                                                                                                End Month
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <asp:DropDownList ID="DDListUnderGraduateQEndMonth" runat="server">
+                                                                                                    <asp:ListItem>January</asp:ListItem>
+                                                                                                    <asp:ListItem>February</asp:ListItem>
+                                                                                                    <asp:ListItem>March</asp:ListItem>
+                                                                                                    <asp:ListItem>April</asp:ListItem>
+                                                                                                    <asp:ListItem>May</asp:ListItem>
+                                                                                                    <asp:ListItem>June</asp:ListItem>
+                                                                                                    <asp:ListItem>July</asp:ListItem>
+                                                                                                    <asp:ListItem>August</asp:ListItem>
+                                                                                                    <asp:ListItem>September</asp:ListItem>
+                                                                                                    <asp:ListItem>October</asp:ListItem>
+                                                                                                    <asp:ListItem>November</asp:ListItem>
+                                                                                                    <asp:ListItem>December</asp:ListItem>
+                                                                                                </asp:DropDownList>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                End Year
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <asp:TextBox ID="TxtUnderGraduateQEndYr" runat="server" CssClass="text-normal" Width="57px"></asp:TextBox>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Qualification
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtUnderGraduateQ" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Date/Expected Date of Award
+                                                                                </td>
+                                                                                <td class="style35">
+                                                                                    <table>
+                                                                                        <tr>
+                                                                                            <td>
+                                                                                                Month
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <asp:DropDownList ID="DDListUnderGraduateQExpMonth" runat="server">
+                                                                                                    <asp:ListItem>January</asp:ListItem>
+                                                                                                    <asp:ListItem>February</asp:ListItem>
+                                                                                                    <asp:ListItem>March</asp:ListItem>
+                                                                                                    <asp:ListItem>April</asp:ListItem>
+                                                                                                    <asp:ListItem>May</asp:ListItem>
+                                                                                                    <asp:ListItem>June</asp:ListItem>
+                                                                                                    <asp:ListItem>July</asp:ListItem>
+                                                                                                    <asp:ListItem>August</asp:ListItem>
+                                                                                                    <asp:ListItem>September</asp:ListItem>
+                                                                                                    <asp:ListItem>October</asp:ListItem>
+                                                                                                    <asp:ListItem>November</asp:ListItem>
+                                                                                                    <asp:ListItem>December</asp:ListItem>
+                                                                                                </asp:DropDownList>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                Year
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <asp:TextBox ID="TxtListUnderGraduateQExpYr" runat="server" CssClass="text-normal"
+                                                                                                    Width="57px"></asp:TextBox>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Degree Classification(if applicable)/FGPA
+                                                                                </td>
+                                                                                <td class="style35">
+                                                                                    <asp:TextBox ID="TxtUnderGraduateQDegree" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td align="left">
+                                                                        <table>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap" colspan="2">
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap" style="font-weight: 700; font-style: italic; text-decoration: underline">
+                                                                                    Graduate Qualification (if Any)
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Name of Institution:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtGraduateQInstitution" runat="server" CssClass="text-normal" Width="289px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Country of Institution:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtGraduateQCountry" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Duration of Studies:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <table>
+                                                                                        <tr>
+                                                                                            <td>
+                                                                                                Start Month
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <asp:DropDownList ID="DDListGraduateQStartMonth" runat="server">
+                                                                                                    <asp:ListItem>January</asp:ListItem>
+                                                                                                    <asp:ListItem>February</asp:ListItem>
+                                                                                                    <asp:ListItem>March</asp:ListItem>
+                                                                                                    <asp:ListItem>April</asp:ListItem>
+                                                                                                    <asp:ListItem>May</asp:ListItem>
+                                                                                                    <asp:ListItem>June</asp:ListItem>
+                                                                                                    <asp:ListItem>July</asp:ListItem>
+                                                                                                    <asp:ListItem>August</asp:ListItem>
+                                                                                                    <asp:ListItem>September</asp:ListItem>
+                                                                                                    <asp:ListItem>October</asp:ListItem>
+                                                                                                    <asp:ListItem>November</asp:ListItem>
+                                                                                                    <asp:ListItem>December</asp:ListItem>
+                                                                                                </asp:DropDownList>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                Start Year
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <asp:TextBox ID="TxtGraduateQStartYr" runat="server" CssClass="text-normal" Width="57px"></asp:TextBox>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td>
+                                                                                                End Month
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <asp:DropDownList ID="DDListGraduateQEndMonth" runat="server">
+                                                                                                    <asp:ListItem>January</asp:ListItem>
+                                                                                                    <asp:ListItem>February</asp:ListItem>
+                                                                                                    <asp:ListItem>March</asp:ListItem>
+                                                                                                    <asp:ListItem>April</asp:ListItem>
+                                                                                                    <asp:ListItem>May</asp:ListItem>
+                                                                                                    <asp:ListItem>June</asp:ListItem>
+                                                                                                    <asp:ListItem>July</asp:ListItem>
+                                                                                                    <asp:ListItem>August</asp:ListItem>
+                                                                                                    <asp:ListItem>September</asp:ListItem>
+                                                                                                    <asp:ListItem>October</asp:ListItem>
+                                                                                                    <asp:ListItem>November</asp:ListItem>
+                                                                                                    <asp:ListItem>December</asp:ListItem>
+                                                                                                </asp:DropDownList>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                End Year
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <asp:TextBox ID="TxtGraduateQEndYr" runat="server" CssClass="text-normal" Width="57px"></asp:TextBox>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Qualification
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtGraduateQ" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Date/Expected Date of Award
+                                                                                </td>
+                                                                                <td class="style35">
+                                                                                    <table>
+                                                                                        <tr>
+                                                                                            <td>
+                                                                                                Month
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <asp:DropDownList ID="DDListGraduateQExpMonth" runat="server">
+                                                                                                    <asp:ListItem>January</asp:ListItem>
+                                                                                                    <asp:ListItem>February</asp:ListItem>
+                                                                                                    <asp:ListItem>March</asp:ListItem>
+                                                                                                    <asp:ListItem>April</asp:ListItem>
+                                                                                                    <asp:ListItem>May</asp:ListItem>
+                                                                                                    <asp:ListItem>June</asp:ListItem>
+                                                                                                    <asp:ListItem>July</asp:ListItem>
+                                                                                                    <asp:ListItem>August</asp:ListItem>
+                                                                                                    <asp:ListItem>September</asp:ListItem>
+                                                                                                    <asp:ListItem>October</asp:ListItem>
+                                                                                                    <asp:ListItem>November</asp:ListItem>
+                                                                                                    <asp:ListItem>December</asp:ListItem>
+                                                                                                </asp:DropDownList>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                Year
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <asp:TextBox ID="TxtListGraduateQExpYr" runat="server" CssClass="text-normal" Width="57px"></asp:TextBox>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Degree Classification(if applicable)/FGPA
+                                                                                </td>
+                                                                                <td class="style35">
+                                                                                    <asp:TextBox ID="TxtGraduateQDegree" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td align="left">
+                                                                        <table>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap" colspan="2">
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap" style="font-weight: 700; font-style: italic; text-decoration: underline">
+                                                                                    Professional Qualifications (if Any)
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Name of Awarding Body:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtProfQBody" runat="server" CssClass="text-normal" Width="289px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Qualification Award:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtProfQAward" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Date/Expected Date of Award
+                                                                                </td>
+                                                                                <td class="style35">
+                                                                                    <table>
+                                                                                        <tr>
+                                                                                            <td>
+                                                                                                Month
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <asp:DropDownList ID="DDListProfQExpMonth" runat="server">
+                                                                                                    <asp:ListItem>January</asp:ListItem>
+                                                                                                    <asp:ListItem>February</asp:ListItem>
+                                                                                                    <asp:ListItem>March</asp:ListItem>
+                                                                                                    <asp:ListItem>April</asp:ListItem>
+                                                                                                    <asp:ListItem>May</asp:ListItem>
+                                                                                                    <asp:ListItem>June</asp:ListItem>
+                                                                                                    <asp:ListItem>July</asp:ListItem>
+                                                                                                    <asp:ListItem>August</asp:ListItem>
+                                                                                                    <asp:ListItem>September</asp:ListItem>
+                                                                                                    <asp:ListItem>October</asp:ListItem>
+                                                                                                    <asp:ListItem>November</asp:ListItem>
+                                                                                                    <asp:ListItem>December</asp:ListItem>
+                                                                                                </asp:DropDownList>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                Year
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <asp:TextBox ID="TxtListProfQExpYr" runat="server" CssClass="text-normal" Width="57px"></asp:TextBox>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="style43">
+                                                                                    &nbsp;
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:Button ID="BtnQualif" runat="server" Text="Save" Width="50px" OnClick="BtnQualifSave_Click" />
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            </asp:Panel>
+                                                        </asp:View>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <asp:View ID="View4" runat="server">
+                                                        <asp:Panel ID="PanelEmp" runat="server" GroupingText="" HorizontalAlign="Left" Width="100%" Wrap="true">
+                                                            <table>
+                                                                <tr>
+                                                                    <td align="left">
+                                                                        <table>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap" style="font-weight: 700; font-style: italic; text-decoration: underline"
+                                                                                    colspan="2">
+                                                                                    CURRENT EMPLOYMENT AND RELEVANT EXPERIENCE:
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Employer&#39;s Name:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtCurEmpName" runat="server" CssClass="text-normal" Width="289px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Employer&#39;s Address:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtCurEmpAddress" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Employer&#39;s Phone:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtCurEmpPhone" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Employer&#39;s Email:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtCurEmpEmail" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Date of Employment
+                                                                                </td>
+                                                                                <td class="style35">
+                                                                                    <table>
+                                                                                        <tr>
+                                                                                            <td>
+                                                                                                Month
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <asp:DropDownList ID="DDlistCurEmpMonth" runat="server">
+                                                                                                    <asp:ListItem>January</asp:ListItem>
+                                                                                                    <asp:ListItem>February</asp:ListItem>
+                                                                                                    <asp:ListItem>March</asp:ListItem>
+                                                                                                    <asp:ListItem>April</asp:ListItem>
+                                                                                                    <asp:ListItem>May</asp:ListItem>
+                                                                                                    <asp:ListItem>June</asp:ListItem>
+                                                                                                    <asp:ListItem>July</asp:ListItem>
+                                                                                                    <asp:ListItem>August</asp:ListItem>
+                                                                                                    <asp:ListItem>September</asp:ListItem>
+                                                                                                    <asp:ListItem>October</asp:ListItem>
+                                                                                                    <asp:ListItem>November</asp:ListItem>
+                                                                                                    <asp:ListItem>December</asp:ListItem>
+                                                                                                </asp:DropDownList>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                Year
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <asp:TextBox ID="TxtCurEmpYr" runat="server" CssClass="text-normal" Width="57px"></asp:TextBox>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Current Position:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtCurEmpPosition" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Description of Responsibility:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtCurEmpJobDescription" runat="server" CssClass="text-normal" Width="376px"
+                                                                                        Height="150px" TextMode="MultiLine"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td align="left">
+                                                                        <table>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap" style="font-weight: 700; font-style: italic; text-decoration: underline"
+                                                                                    colspan="2">
+                                                                                    PREVIOUS FULL-TIME EMPLOYMENT:
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Employer&#39;s Name:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtPrevEmpName" runat="server" CssClass="text-normal" Width="289px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Employer&#39;s Address:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtPrevEmpAddress" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Employer&#39;s Phone:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtPrevEmpPhone" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Employer&#39;s Email:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtPrevEmpEmail" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Date of Employment
+                                                                                </td>
+                                                                                <td class="style35">
+                                                                                    <table>
+                                                                                        <tr>
+                                                                                            <td>
+                                                                                                Month
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <asp:DropDownList ID="DDlistPrevEmpMonth" runat="server">
+                                                                                                    <asp:ListItem>January</asp:ListItem>
+                                                                                                    <asp:ListItem>February</asp:ListItem>
+                                                                                                    <asp:ListItem>March</asp:ListItem>
+                                                                                                    <asp:ListItem>April</asp:ListItem>
+                                                                                                    <asp:ListItem>May</asp:ListItem>
+                                                                                                    <asp:ListItem>June</asp:ListItem>
+                                                                                                    <asp:ListItem>July</asp:ListItem>
+                                                                                                    <asp:ListItem>August</asp:ListItem>
+                                                                                                    <asp:ListItem>September</asp:ListItem>
+                                                                                                    <asp:ListItem>October</asp:ListItem>
+                                                                                                    <asp:ListItem>November</asp:ListItem>
+                                                                                                    <asp:ListItem>December</asp:ListItem>
+                                                                                                </asp:DropDownList>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                Year
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <asp:TextBox ID="TxtPrevEmpYr" runat="server" CssClass="text-normal" Width="57px"></asp:TextBox>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Current Position:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtPrevEmpPosition" runat="server" CssClass="text-normal" Width="376px"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td nowrap="nowrap">
+                                                                                    Description of Responsibility:
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:TextBox ID="TxtPrevEmpJobDescription" runat="server" CssClass="text-normal"
+                                                                                        Width="376px" Height="150px" TextMode="MultiLine"></asp:TextBox>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="style43">
+                                                                                    &nbsp;
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:Button ID="BtnEmp" runat="server" Text="Save" Width="50px" OnClick="BtnEmpSave_Click" />
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            </asp:Panel>
+                                                        </asp:View>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </asp:MultiView>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</asp:Content>

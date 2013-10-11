@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "PTIEduPortal", ".", "{E7373252-646C-4361-B993-4153AF401A38}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFramework = "3.5"
+		Debug.AspNetCompiler.VirtualPath = "/PTIEduPortal"
+		Debug.AspNetCompiler.PhysicalPath = "..\PTIEduPortal\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\PTIEduPortal\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/PTIEduPortal"
+		Release.AspNetCompiler.PhysicalPath = "..\PTIEduPortal\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\PTIEduPortal\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "5655"
+	EndProjectSection
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "PTIEduPortalAdmin", "..\PTIEduPortalAdmin\", "{38608F65-184F-48AB-9149-5B7977800FE5}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFramework = "3.5"
+		Debug.AspNetCompiler.VirtualPath = "/PTIEduPortalAdmin"
+		Debug.AspNetCompiler.PhysicalPath = "..\PTIEduPortalAdmin\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\PTIEduPortalAdmin\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/PTIEduPortalAdmin"
+		Release.AspNetCompiler.PhysicalPath = "..\PTIEduPortalAdmin\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\PTIEduPortalAdmin\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "5657"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E7373252-646C-4361-B993-4153AF401A38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7373252-646C-4361-B993-4153AF401A38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38608F65-184F-48AB-9149-5B7977800FE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38608F65-184F-48AB-9149-5B7977800FE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,435 @@
+﻿using System;
+using System.Collections;
+using System.Configuration;
+using System.Data;
+using System.Linq;
+using System.Web;
+using System.Web.Security;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
+using System.Web.UI.WebControls.WebParts;
+using System.Data.SqlClient;
+using System.Xml.Linq;
+using System.IO;
+using System.Text;
+using System.Drawing.Printing;
+using System.Drawing.Imaging;
+using System.Collections.Generic;
+using CrystalDecisions.CrystalReports.Engine;
+using CrystalDecisions.Shared;
+//using Cyberspace.CurrencyInWords;
+//using Cyberspace.NumberToWord.Cyberspace.NumberToWord;
+
+
+
+public partial class ReportPo : System.Web.UI.Page
+{
+    private static string str = ConfigurationManager.AppSettings["conn"];
+    private static string str2 = ConfigurationManager.AppSettings["conn2"];
+    //private int m_currentPageIndex;
+    //private IList<Stream> m_streams;
+    //private static string printername = "";
+
+    private static string AmountWords = "";
+    private static string Programme = "";
+    private static string Price = "";
+    private static string Centre = "";
+
+    public static string PtCode = "";
+    public static string ReportTypeGlobal = "";
+    ReportDocument RptDoc = new ReportDocument();
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        //try
+        //{
+        string BatchNo = "";
+        string printoption = "";
+        string Title = "";
+        string Title2 = "";
+        string session = "";
+        string centre = "";
+        //double dd = 0;
+
+        BatchNo = (string)Session["BatchNo"];
+        printoption = (string)Session["printoption"];
+        session = (string)Session["Session"];
+        centre = (string)Session["Centre"];
+        
+        //Programme = (string)Session["Programme"];
+        //Price = (string)Session["Price"];
+        //Centre = (string)Session["Centre"];
+
+
+        Title = "NATIONAL OPEN UNIVERSITY OF NIGERIA";
+
+        DataTable dt = new DataTable();
+
+        string RptPath = "";
+        if (printoption != null)
+        {
+            //Noun Clearance pin
+            if (printoption.ToLower() == "noun application pin")
+            {
+                loadifo(BatchNo);
+
+                Title2 = printoption.ToLower() + ", " + Programme.ToLower() + ", " + Centre.ToLower() + " " + "study center" + ", N" + Price + "," + " " + session;
+                RptPath = Server.MapPath("~/Admin/Applicationpin.rpt");
+                dt = Getreports(BatchNo);
+
+                RptDoc.Load(RptPath);
+                RptDoc.SetDataSource(dt);
+                //RptDoc.SetParameterValue("", 10);
+                RptDoc.DataDefinition.FormulaFields["Title"].Text = "'" + Title + "'";
+                RptDoc.DataDefinition.FormulaFields["Title2"].Text = "'" + Title2 + "'";
+                //RptDoc.DataDefinition.FormulaFields["AmountWords"].Text = "'" + AmountWords + "'";
+            }
+
+            if (printoption.ToLower() == "noun clearance pin")
+            {
+
+                Title2 = printoption.ToLower() + ", " + centre.ToLower() + " " + "study center" + "," + " " + session;
+                RptPath = Server.MapPath("~/Admin/Clearancepin.rpt");
+                dt = Getreport2(BatchNo);
+
+                RptDoc.Load(RptPath);
+                RptDoc.SetDataSource(dt);
+
+                RptDoc.DataDefinition.FormulaFields["Title"].Text = "'" + Title + "'";
+                RptDoc.DataDefinition.FormulaFields["Title2"].Text = "'" + Title2 + "'";
+                
+            }
+
+            //RptDoc.DataDefinition.FormulaFields["BusinessName"].Text = "'" + BusinessName.Replace("'", "''") + "'";
+            //RptDoc.DataDefinition.FormulaFields["Address"].Text = "'" + Address.Replace("'", "''") + "'";
+            //RptDoc.DataDefinition.FormulaFields["Title"].Text = "'" + Title + "'";
+            //RptDoc.DataDefinition.FormulaFields["Title2"].Text = "'" + Title2 + "'";
+            //RptDoc.DataDefinition.FormulaFields["AmountWords"].Text = "'" + AmountWords + "'";
+            //RptDoc.DataDefinition.FormulaFields["ContactPerson"].Text = "'" + ContactPerson.Replace("'", "''") + "'";
+            //RptDoc.DataDefinition.FormulaFields["Phone"].Text = "'" + Phone + "'";
+            //RptDoc.DataDefinition.FormulaFields["AmountWords"].Text = "'" + AmountWords + "'";
+
+            //ReportTypeGlobal = ReportType;
+            CrystalReportViewer1.ReportSource = RptDoc;
+            PrintToPdf(printoption, BatchNo);
+        }
+        else
+        {
+            Response.Redirect("DispatchedPin.aspx");
+        }
+
+        //}
+        //catch (Exception ex)
+        //{           
+
+        //}
+    }
+
+    private DataTable Getreport2(string BatchNo)
+    {
+        try
+        {
+
+            DataSet ClearancePins = new DataSet();
+            try
+            {
+                SqlConnection cnn = new SqlConnection(str);
+                cnn.Open();
+
+                string query = "";
+
+                query = "SELECT * FROM [MasterForms] where [BatchNumber]  = '" + BatchNo + "' order by [SerialNumber] asc";
+
+
+                SqlDataAdapter dat = new SqlDataAdapter(query, cnn);
+                dat.Fill(ClearancePins, "MasterForms");
+                cnn.Dispose();
+                cnn.Close();
+
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return ClearancePins.Tables[0];          
+
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
+        
+    }
+
+    private void loadifo(string BatchNo)
+    {
+        try
+        {
+            Programme = "";
+            Price = "";
+            Centre = "";
+
+            DataSet ds = new DataSet();
+            string qry = "SELECT [Programme],[Center],[Price] FROM [MasterPins] where BatchNumber='" + BatchNo + "'";
+            ds = SearchData(qry);
+            double dd = 0;
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                for (int jj = 0; jj < ds.Tables[0].Rows.Count; jj++)
+                {
+                    Programme = ds.Tables[0].Rows[jj][0].ToString();
+                    Centre = ds.Tables[0].Rows[jj][1].ToString();
+                    dd = Double.Parse(ds.Tables[0].Rows[jj][2].ToString());
+                    
+                    Price =  String.Format("{0:N}", dd);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private DataSet SearchData(string qry)
+    {
+        DataSet ds = new DataSet();
+        try
+        {
+            SqlConnection cnn = new SqlConnection(str);
+            cnn.Open();
+
+            SqlDataAdapter dat = new SqlDataAdapter(qry, cnn);
+            dat.Fill(ds);
+
+            cnn.Dispose();
+            cnn.Close();
+        }
+        catch (Exception e)
+        {
+            string ex = e.Message;
+        }
+        return ds;
+    }
+
+    private DataTable Getreports(string Batchno)
+    {
+        try
+        {
+
+            DataSet Pinns = new DataSet();
+            try
+            {
+                SqlConnection cnn = new SqlConnection(str);
+                cnn.Open();
+
+                string query = "";
+
+                query = "SELECT * FROM [MasterPins] where [BatchNumber]  = '" + Batchno + "' order by [SerialNumber] asc";
+
+
+                SqlDataAdapter dat = new SqlDataAdapter(query, cnn);
+                dat.Fill(Pinns, "MasterPins");
+                cnn.Dispose();
+                cnn.Close();
+
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return Pinns.Tables[0];
+
+
+            //if (Optype == "Orders")
+            //{
+            //    return Po.Tables[0];
+            //}
+            //else
+            //{
+            //    return Gr.Tables[0];
+            //}
+
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
+    }
+    protected void PrintToPdf(string supplier, string po)
+    {
+        Response.Buffer = false;
+        Response.ClearContent();
+        Response.ClearHeaders();
+        try
+        {
+            string FilNamm = "";
+            if (FilNamm.Length > 5)
+            {
+                FilNamm = supplier.Substring(0, 5) + po;
+            }
+            else
+            {
+                FilNamm = po;
+            }
+
+            //FilNamm = ReportTypeGlobal + " PDF Report";
+            RptDoc.ExportToHttpResponse(ExportFormatType.PortableDocFormat, Response, false, FilNamm);
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            ex = null;
+        }
+        finally
+        {
+            RptDoc.Close();
+            RptDoc.Dispose();
+        }
+
+    }
+    //private void populatereport()
+    //{
+    //    SqlConnection cnn = new SqlConnection(str);
+    //    cnn.Open();
+
+    //    SqlCommand cmd = null;
+    //    SqlDataReader dr = null;
+    //    SqlDataAdapter dat = null;
+
+
+    //    //DataSet DataSet2 = new DataSet();
+    //    DataSet PoGorundCost = new DataSet();
+    //    DataSet PoInfos = new DataSet();
+    //    DataSet PoSupplier = new DataSet();
+
+
+
+    //    dat = new SqlDataAdapter("SELECT [TotalCost] FROM [PoCostTemp]", cnn);
+    //    dat.Fill(PoGorundCost, "PoCostTemp");
+
+    //    dat = new SqlDataAdapter("SELECT * FROM [POSuppliersTemp]", cnn);
+    //    dat.Fill(PoSupplier, "POSuppliersTemp");
+
+    //    dat = new SqlDataAdapter("SELECT * FROM [PurchaseOrderTemp]", cnn);
+    //    dat.Fill(PoInfos, "PurchaseOrderTemp");
+
+    //    try
+    //    {
+    //        ReportViewer1.Reset();
+    //        ReportViewer1.Visible = true;
+
+    //        ReportDataSource rds1 = new ReportDataSource("PoGorundCost_PoCostTemp", PoGorundCost.Tables[0]);
+    //        ReportDataSource rds2 = new ReportDataSource("PoSupplier_POSuppliersTemp", PoSupplier.Tables[0]);
+    //        ReportDataSource rds3 = new ReportDataSource("PoInfos_PurchaseOrderTemp", PoInfos.Tables[0]);
+
+    //        ReportViewer1.ProcessingMode = ProcessingMode.Local;
+    //        String path = Server.MapPath("~/Reports/PurchaseOrder.rdlc");
+
+    //        //ReportViewer1.LocalReport.ReportPath = "C:\\Users\\user\\Documents\\Visual Studio 2008\\Websites\\ChequePayment\\Reports\\Report1.rdlc";// "Report.rdlc";
+    //        ReportViewer1.LocalReport.ReportPath = path;
+
+    //        ReportViewer1.LocalReport.DataSources.Add(rds1);// = DataSet1;
+    //        ReportViewer1.LocalReport.DataSources.Add(rds2);
+    //        ReportViewer1.LocalReport.DataSources.Add(rds3);
+    //        ReportViewer1.LocalReport.Refresh();
+    //    }
+    //    catch (Exception ex)
+    //    {
+
+    //    }
+    //}
+    private void ProceccRPT()
+    {
+        ////if (cmbPrinter.Items.Count == 0)
+        ////{
+        ////    MessageBox.Show("No printer installed in this system");
+        ////    cmbPrinter.Focus();
+        ////    return;
+        ////}
+
+        ////if (printerReady() == true)
+        ////{
+
+
+        ////}
+        ////else
+        ////{
+        ////    MessageBox.Show("Check your printer status");
+        ////    return;
+        ////}
+
+        //SqlConnection cnn = new SqlConnection(str);
+        //cnn.Open();
+
+        //SqlCommand cmd = null;
+        //SqlDataReader dr = null;
+        //SqlDataAdapter dat = null;
+
+        //cmd = new SqlCommand("select * from Printername", cnn);
+        //dr = cmd.ExecuteReader();
+        //if(dr.Read())
+        //{
+        //    printername = dr.GetString(0);
+        //}
+        //dr.Dispose();
+        //cmd.Dispose();
+
+
+        ////DataSet DataSet2 = new DataSet();
+        //DataSet PoGorundCost = new DataSet();
+        //DataSet PoInfos = new DataSet();
+        //DataSet PoSupplier = new DataSet();
+
+        //dat = new SqlDataAdapter("SELECT [TotalCost] FROM [PoCostTemp]", cnn);
+        //dat.Fill(PoGorundCost, "PoCostTemp");
+
+        //dat = new SqlDataAdapter("SELECT * FROM [POSuppliersTemp]", cnn);
+        //dat.Fill(PoSupplier, "POSuppliersTemp");
+
+        //dat = new SqlDataAdapter("SELECT * FROM [PurchaseOrderTemp]", cnn);
+        //dat.Fill(PoInfos, "PurchaseOrderTemp");
+
+        //try
+        //{
+        //    ReportViewer1.Reset();
+        //    ReportViewer1.Visible = true;
+
+        //    ReportDataSource rds1 = new ReportDataSource("PoGorundCost_PoCostTemp", PoGorundCost.Tables[0]);
+        //    ReportDataSource rds2 = new ReportDataSource("PoSupplier_POSuppliersTemp", PoSupplier.Tables[0]);
+        //    ReportDataSource rds3 = new ReportDataSource("PoInfos_PurchaseOrderTemp", PoInfos.Tables[0]);
+
+        //    ReportViewer1.ProcessingMode = ProcessingMode.Local;
+        //    String path = Server.MapPath("~/Reports/PurchaseOrder.rdlc");
+
+        //    //ReportViewer1.LocalReport.ReportPath = "C:\\Users\\user\\Documents\\Visual Studio 2008\\Websites\\ChequePayment\\Reports\\Report1.rdlc";// "Report.rdlc";
+        //    LocalReport report = new LocalReport();
+        //    report.ReportPath = path;
+        //    report.DataSources.Add(rds1);// = DataSet1;
+        //    report.DataSources.Add(rds2);
+        //    report.DataSources.Add(rds3);
+        //    //ReportViewer1.LocalReport.Refresh();
+
+        //    Export(report);
+        //    m_currentPageIndex = 0;
+        //    Print();
+        //}
+        //catch (Exception ex)
+        //{
+
+        //}
+    }
+
+    private void showmassage(string message)
+    {
+        message = message.Replace("'", " ").Replace("\r\n", "");
+        Label lbl = new Label();
+        lbl.Text = "<script language='javascript'>" + Environment.NewLine + "window.alert(" + "'" + message + "'" + ")</script>";
+        Page.Controls.Add(lbl);
+    }
+
+}

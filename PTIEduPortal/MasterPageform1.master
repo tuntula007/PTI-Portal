@@ -1,0 +1,194 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPageform1.master.cs"
+    Inherits="MasterPageform1" %>
+
+<%@ Register Assembly="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35"
+    Namespace="System.Web.UI" TagPrefix="cc1" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+    <link rel="stylesheet" type="text/css" href="css/stylemain.css" />
+    <link rel="stylesheet" type="text/css" href="css/style1.css" />
+    <meta name="google-site-verification" content="XsvSzZ5fr05nmcPbP4-UWvjEn18LcUGah4Ev6vZ6JiI" />
+
+    <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-25104383-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+    <title>Distance Learning Center University of Ibadan</title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <div align="center">
+        <form id="form1" runat="server">
+        <table border="0" cellpadding="0" cellspacing="0" width="929">
+            <!-- fwtable fwsrc="templatemain.png" fwpage="Page 1" fwbase="templatemain.gif" fwstyle="Dreamweaver" fwdocid = "1559416576" fwnested="0" -->
+            <tr>
+                <td>
+                    <img src="images/spacer.gif" width="22" height="1" border="0" alt="" />
+                </td>
+                <td>
+                    <img src="images/spacer.gif" width="24" height="1" border="0" alt="" />
+                </td>
+                <td>
+                    <img src="images/spacer.gif" width="26" height="1" border="0" alt="" />
+                </td>
+                <td>
+                    <img src="images/spacer.gif" width="44" height="1" border="0" alt="" />
+                </td>
+                <td>
+                    <img src="images/spacer.gif" width="224" height="1" border="0" alt="" />
+                </td>
+                <td>
+                    <img src="images/spacer.gif" width="29" height="1" border="0" alt="" />
+                </td>
+                <td>
+                    <img src="images/spacer.gif" width="21" height="1" border="0" alt="" />
+                </td>
+                <td>
+                    <img src="images/spacer.gif" width="462" height="1" border="0" alt="" />
+                </td>
+                <td>
+                    <img src="images/spacer.gif" width="30" height="1" border="0" alt="" />
+                </td>
+                <td>
+                    <img src="images/spacer.gif" width="27" height="1" border="0" alt="" />
+                </td>
+                <td>
+                    <img src="images/spacer.gif" width="15" height="1" border="0" alt="" />
+                </td>
+                <td>
+                    <img src="images/spacer.gif" width="5" height="1" border="0" alt="" />
+                </td>
+                <td>
+                    <img src="images/spacer.gif" width="1" height="1" border="0" alt="" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <img name="templatemain_r1_c1" src="images/templatemain_r1_c1.gif" width="46" height="14"
+                        border="0" id="templatemain_r1_c1" alt="" />
+                </td>
+                <td colspan="3" class="toprepline1">
+                    <img name="templatemain_r1_c3" src="images/templatemain_r1_c3.gif" width="294" height="14"
+                        border="0" id="templatemain_r1_c3" alt="" />
+                </td>
+                <td colspan="7">
+                    <img name="templatemain_r1_c6" src="images/templatemain_r1_c6.gif" width="589" height="14"
+                        border="0" id="templatemain_r1_c6" alt="" />
+                </td>
+                <td>
+                    <img src="images/spacer.gif" width="1" height="14" border="0" alt="" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <img name="leftTopcurve1" src="images/leftTopcurve1.gif" width="46" height="73" border="0"
+                        id="leftTopcurve1" alt="" />
+                </td>
+                <td colspan="3">
+                    <img name="templatemain_r2_c3" src="images/templatemain_r2_c3.gif" width="294" height="73"
+                        border="0" id="templatemain_r2_c3" alt="" />
+                </td>
+                <td colspan="4" style="background-image: url(images/staticTopbarimage1.gif); background-repeat: no-repeat"
+                    align="right">
+                    <a href="StudentControlCenter.aspx" style="color: White; text-decoration: none">My Portal
+                        Home</a>&nbsp;|&nbsp;<a href="feedbackform.aspx" style="color: White; text-decoration: none">Need
+                            Help? Contact Us</a><% if (Session["StudentSignOn"] != null) Response.Write("&nbsp;| <a href=\"Logout.aspx\" style=\"color: White; text-decoration: none\">Logout</a>&nbsp;");%>
+                </td>
+                <td colspan="2">
+                    <img name="topbarRightrepeat1" src="images/topbarRightrepeat1.gif" width="42" height="73"
+                        border="0" id="topbarRightrepeat1" alt="" />
+                </td>
+                <td rowspan="7" style="background:images/templatemain_r2_c12.gif no-repeat">
+                </td>
+                <td>
+                    <img src="images/spacer.gif" width="1" height="73" border="0" alt="" />
+                </td>
+            </tr>
+            <tr>
+                <td class="sidereplineleft1-1">
+                    &nbsp;
+                </td>
+                <td colspan="9" rowspan="3" valign="top">
+                    <cc1:ScriptManager runat="server" EnablePartialRendering="true" ID="ScriptManager1">
+                    </cc1:ScriptManager>
+                    <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                        <p>
+                        </p>
+                    </asp:ContentPlaceHolder>
+                </td>
+                <td rowspan="2" class="sidereplineRight1-1">
+                    &nbsp;
+                </td>
+                <td>
+                    <img src="images/spacer.gif" width="1" height="16" border="0" alt="" />
+                </td>
+            </tr>
+            <tr>
+                <td rowspan="2" class="sidereplineleft1-1">
+                    &nbsp;
+                </td>
+                <td>
+                    <img src="images/spacer.gif" width="1" height="67" border="0" alt="" />
+                </td>
+            </tr>
+            <tr>
+                <td class="sidereplineRight1-1">
+                    &nbsp;
+                </td>
+                <td>
+                    <img src="images/spacer.gif" width="1" height="302" border="0" alt="" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="11" style="background-image: url(images/template1_r6_c11.gif); background-repeat: no-repeat;" align="center">
+                    For technical queries, send Email to support3@deltasuniversity.com                 </td>
+                <td>
+                    <img src="images/spacer.gif" width="1" height="40" border="0" alt="" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <img name="LeftbottomCurve1" src="images/LeftbottomCurve1.gif" width="72" height="50"
+                        border="0" id="LeftbottomCurve1" alt="" />
+                </td>
+                <td>
+                    <img name="centerbottombarshort1" src="images/centerbottombarshort1.gif" width="44"
+                        height="50" border="0" id="centerbottombarshort1" alt="" />
+                </td>
+                <td colspan="4">
+                    <img name="centerbottombarLong1" src="images/centerbottombarLong1.gif" width="736"
+                        height="50" border="0" id="centerbottombarLong1" alt="" />
+                </td>
+                <td colspan="3">
+                    <img name="rightbottomCurve1" src="images/rightbottomCurve1.gif" width="72" height="50"
+                        border="0" id="rightbottomCurve1" alt="" />
+                </td>
+                <td>
+                    <img src="images/spacer.gif" width="1" height="50" border="0" alt="" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="11">
+                    <img name="templatemain_r8_c1" src="images/templatemain_r8_c1.gif" width="924" height="9"
+                        border="0" id="templatemain_r8_c1" alt="" />
+                </td>
+                <td>
+                    <img src="images/spacer.gif" width="1" height="9" border="0" alt="" />
+                </td>
+            </tr>
+        </table>
+        </form>
+    </div>
+</body>
+</html>

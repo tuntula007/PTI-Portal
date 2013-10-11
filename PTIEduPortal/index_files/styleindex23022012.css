@@ -1,0 +1,76 @@
+.tbstyle {
+	BORDER-TOP: #333 1px dashed
+}
+.myborderright {
+	BORDER-RIGHT: #666 1px dashed; FONT-SIZE: 12px; COLOR: #000
+}
+.myborderright2 {
+	FONT-SIZE: 12px; COLOR: #000
+}
+.myborderright2 A {
+	FONT-WEIGHT: bold; FONT-SIZE: 13px; COLOR: #f00
+}
+.myborderright2 A:hover {
+	FONT-SIZE: 12px; COLOR: #000
+}
+.topmenu {
+	FONT-WEIGHT: bold; FONT-SIZE: 12px; FONT-FAMILY: tahoma
+}
+.topmenu A {
+	FONT-WEIGHT: bold; FONT-SIZE: 12px; COLOR: #000; FONT-FAMILY: tahoma; TEXT-ALIGN: center
+}
+.topmenu A:hover {
+	FONT-WEIGHT: bold; FONT-SIZE: 13px; COLOR: #063; FONT-FAMILY: tahoma; TEXT-ALIGN: center
+}
+.topmenu A:active {
+	FONT-WEIGHT: bold; FONT-SIZE: 13px; COLOR: #063; FONT-FAMILY: tahoma; TEXT-ALIGN: center
+}
+	
+.topmenu TD {
+	BORDER-RIGHT: #666 1px dashed; PADDING-LEFT: 3px; FONT-WEIGHT: bold; FONT-SIZE: 12px; FONT-FAMILY: tahoma; TEXT-ALIGN: center
+}
+.dropboxstyle {
+	PADDING-RIGHT: 2px; FONT-SIZE: 11px; COLOR: #fff; FONT-FAMILY: tahoma; TEXT-ALIGN: justify
+}
+.feestrtable {
+	PADDING-RIGHT: 2px; FONT-SIZE: 12px; COLOR: #333; FONT-FAMILY: tahoma; TEXT-ALIGN: justify
+}
+.feestrtable TD {
+	HEIGHT: 25px
+}
+#feestructurehead {
+	FONT-WEIGHT: bold; FONT-SIZE: 12px
+}
+.padtextleft {
+	PADDING-LEFT: 20px
+}
+.Printheader {
+	FONT-WEIGHT: bold; FONT-SIZE: 24px; COLOR: #000; BORDER-BOTTOM: #000 1px dashed; FONT-FAMILY: arial; TEXT-ALIGN: center
+}
+.subheade {
+	FONT-WEIGHT: bold; FONT-SIZE: 15px; COLOR: #000; FONT-FAMILY: arial; TEXT-ALIGN: center
+}
+.regprocedure {
+	FONT-SIZE: 15px; FONT-FAMILY: arial; TEXT-ALIGN: center
+}
+.regprocedure SPAN {
+	FONT-WEIGHT: bold; FONT-SIZE: 12px; FONT-STYLE: italic; FONT-FAMILY: arial
+}
+.homefooter {
+	FONT-SIZE: 10px; COLOR: #000; FONT-FAMILY: arial
+}
+#form1 #wrapper #container table tbody tr td table tr .noticebg table tr .topfont p b {
+	color: #FF3A00;
+}
+.bold {
+	font-weight: bold;
+}
+.bold {
+	font-weight: bold;
+}
+.bold {
+	font-weight: bold;
+}
+.bold {
+	font-weight: bold;
+}

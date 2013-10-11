@@ -1,0 +1,187 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="LoginMasterPage.master.cs"
+    Inherits="MasterPage" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+    <style type="text/css">
+        
+        body
+        {
+        	background-color:White;
+        	
+        }
+        
+        .ModalPopupBG
+        {
+        }
+        .ModalWindow
+        {
+            background-color: #CCFFCC;
+            border-style: solid;
+            border-width: 2px;
+            border-style: solid;
+            border-color: Black;
+            padding: 3px;
+            width: 300px;
+            height: 150px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .headerbg
+        {
+        	background-image:url('Images/topadminlogo.jpg');
+        	height:117px;
+        	width:1193px;
+        }
+        .style1
+        {
+            width: 367px;
+        }
+    </style>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+    <title>PTI Admin Portal</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body alink="#993333">
+<form id="form1" runat="server" style=" top:0px">
+    <asp:ScriptManager ID="ScriptManager1" runat="server">
+    </asp:ScriptManager>
+    <div align="center" style="overflow: auto; border:0px gray solid; top:0px; margin-top:0px">        
+        <table width="776" border="0" cellspacing="0" cellpadding="3" bgcolor="White">
+            <tr>
+                <td align="center" class="parent_table">
+                    <table width="1193" border="1" cellspacing="0" style="border-color:Gray" cellpadding="0">
+                        <tr>
+                            <td colspan="2" align="left" valign="bottom" class="headerbg" bgcolor="#009D4F">
+                                <table style="width:100%; vertical-align:bottom">
+                                    <tr>
+                                        <td class="style1">
+                                            &nbsp;</td>
+                                        <td style="float:left">
+                                            <asp:Menu ID="mnuMain" runat="server" DynamicHorizontalOffset="2" Font-Bold="True"
+                                                Font-Names="Century Gothic" Font-Size="8pt" ForeColor="White" StaticSubMenuIndent="10px"
+                                                BackColor="#30587B" Orientation="Horizontal">
+                                                <StaticSelectedStyle BackColor="#FF6666" ForeColor="#990000" />
+                                                <StaticMenuItemStyle HorizontalPadding="5px" VerticalPadding="2px" ForeColor="White" />
+                                                <DynamicHoverStyle BackColor="Maroon" ForeColor="White" />
+                                                <DynamicMenuStyle BackColor="#666666" />
+                                                <DynamicSelectedStyle BackColor="#663300" />
+                                                <DynamicMenuItemStyle HorizontalPadding="5px" VerticalPadding="2px" />
+                                                <StaticHoverStyle BackColor="Black" ForeColor="White" />
+                                                <Items>
+                                                    <asp:MenuItem Text="Home" Value="Home" NavigateUrl="~/loginaccess.aspx"></asp:MenuItem>
+                                                    <asp:MenuItem Text="About Us" Value="About Us" NavigateUrl="~/AboutUS.aspx"></asp:MenuItem>
+                                                    <asp:MenuItem Text="Contact US" Value="Contact US" NavigateUrl="~/ContactUS.aspx">
+                                                    </asp:MenuItem>
+                                                    <asp:MenuItem Text="Password" Value="Password">
+                                                        <asp:MenuItem NavigateUrl="~/RecoverPassword.aspx" Text="Retrieve Password" Value="Retrieve Password">
+                                                        </asp:MenuItem>
+                                                    </asp:MenuItem>
+                                                </Items>
+                                            </asp:Menu>
+                                        </td>
+                                        <td style="float:left">
+                                            <asp:Menu ID="Menu1" runat="server" BackColor="White" DynamicHorizontalOffset="2"
+                                                Font-Names="Verdana" Font-Size="0.8em" ForeColor="#30587B" OnMenuItemClick="Menu1_MenuItemClick"
+                                                Orientation="Horizontal" StaticSubMenuIndent="10px" Width="100%">
+                                                <StaticSelectedStyle BackColor="#FFCC66" />
+                                                <StaticMenuItemStyle HorizontalPadding="5px" VerticalPadding="2px" />
+                                                <DynamicHoverStyle BackColor="White" ForeColor="#009D4F" />
+                                                <DynamicMenuStyle BackColor="#FFFBD6" />
+                                                <DynamicSelectedStyle BackColor="#FFCC66" />
+                                                <DynamicMenuItemStyle HorizontalPadding="5px" VerticalPadding="2px" />
+                                                <StaticHoverStyle BackColor="White" ForeColor="#009D4F" />
+                                                <Items>
+                                                    <asp:MenuItem Value="loginName"></asp:MenuItem>
+                                                    <asp:MenuItem Text="Logout" Value="Logout"></asp:MenuItem>
+                                                </Items>
+                                            </asp:Menu>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="style1">
+                                            &nbsp;</td>
+                                        <td colspan="2">
+                                            &nbsp;</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <td class="content_area">
+                                <table border="0" cellspacing="0" cellpadding="0" style="width: 967px">
+                                    <tr>
+                                        <td height="20" style="text-align: left" width="50%">
+                                            <asp:SiteMapDataSource ID="SiteMapDataSource1" runat="server" />                                            
+                                        </td>
+                                        <td height="20" style="text-align: right" align="right" valign="bottom">
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="300" align="left" valign="top" class="content_area2" colspan="2">
+                                            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                                            </asp:ContentPlaceHolder>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <asp:Panel runat="server" ID="_pnlClientMessage_" CssClass="ModalWindow" Wrap="true">
+                                                            <table>
+                                                                <tr>
+                                                                    <td>
+                                                                        <asp:UpdatePanel ID="_updClientMessage_" runat="server" UpdateMode="Conditional">
+                                                                            <ContentTemplate>
+                                                                                <asp:Button ID="btnShowPopup" runat="server" Style="display: none" />                                                                                
+                                                                                <ajaxToolkit:ModalPopupExtender ID="mdlPopup" runat="server" TargetControlID="btnShowPopup"
+                                                                                    PopupControlID="_pnlClientMessage_" CancelControlID="btnClose" BackgroundCssClass="ModalPopupBG" />
+                                                                                <asp:Label runat="server" ID="_lblClientMessage_" />
+                                                                                <br />
+                                                                                <br />
+                                                                                <br />
+                                                                                <br />                                                                                
+                                                                            </ContentTemplate>
+                                                                        </asp:UpdatePanel>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <asp:Button ID="btnCLose" runat="server" Text=" OK " CausesValidation="false" Width="60px" />
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </asp:Panel>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="footer_line">
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td align="left" valign="middle" bgcolor="#30587B" class="footer-settings">
+                                            Copyright &copy;Petroleum Training Institute - 2012
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            </table>
+    </div>
+    </form>
+</body>
+</html>
