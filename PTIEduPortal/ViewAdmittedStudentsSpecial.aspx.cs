@@ -278,7 +278,7 @@ public partial class ViewAdmittedStudentsSpecial : System.Web.UI.Page
         string p = App.Programme;
         alreadyPaidAdmissionLetterfees = CybSoft.EduPortal.Business.SignOnBusiness.VerifyAdmissionLetterFeeIsPaid (txtSearch.Text.Trim());
        
-        alreadyPaidAdmissionLetterfees = true;
+        //alreadyPaidAdmissionLetterfees = true;
        
         if (alreadyPaidAdmissionLetterfees)
         {
